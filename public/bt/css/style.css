@@ -1,0 +1,16 @@
+.body
+{
+   background-color: rgba(138, 43, 226, 0.2);  
+} 
+
+#cab {
+     background-color: rgba(138, 43, 226, 0.8); /* Com transparência (alpha) */
+ }
+
+ #corpo {
+     background-color: rgba(138, 43, 226, 0.2); /* Com transparência (alpha) */
+ }
+
+  #rodape {
+     background-color: rgba(138, 43, 226, 0.8); /* Com transparência (alpha) */
+ }

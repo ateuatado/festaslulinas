@@ -1,6 +1,6 @@
     </main>
 
-    <footer class="container-fluid mt-5 py-3 bg-light fixed-bottom">
+    <footer class="container-fluid mt-5 py-3 fixed-bottom footer-festa">
         <div class="container text-center">
             &copy; <?php echo date('Y'); ?> Festas Juninas - Todos os direitos reservados
         </div>

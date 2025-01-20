@@ -7,8 +7,8 @@
     <link rel="stylesheet" href="<?php echo base_url('bt/css/bootstrap.min.css'); ?>">
     <link rel="stylesheet" href="<?php echo base_url('bt/css/style.css'); ?>">
 </head>
-<body id="corpo">
-    <header class="container-fluid" >
+<body>
+    <header class="container-fluid header-festa" >
         <nav class="navbar navbar-expand-lg navbar-light" id="cab">
             <div class="container-fluid">
                 <a class="navbar-brand" href="#">Festas Lulinas</a>

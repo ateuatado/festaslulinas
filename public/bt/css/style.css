@@ -1,5 +1,43 @@
-.body
-{
+  :root {
+      --amarelo-festa: #FFB127;
+      --verde-festa: #00B020;
+      --azul-festa: #0042E5;
+      --vermelho-festa: #E10F17;
+  }
+
+  .header-festa {
+      background-color: var(--amarelo-festa); /* Usando a variável */
+      color: var(--azul-festa); /* Cor do texto */
+  }
+
+   /* Footer */
+  .footer-festa {
+      background-color: var(--verde-festa);
+      color: #fff; /* Texto branco */
+  }
+
+   /* Botão */
+  .btn-vermelho {
+      background-color: var(--vermelho-festa);
+      border-color: var(--vermelho-festa);
+      color: #fff;
+  }
+  .btn-vermelho:hover{
+      background-color: #fff;
+      border-color: var(--vermelho-festa);
+      color: var(--vermelho-festa);
+  }
+
+  /* Link */
+  .link-azul {
+      color: var(--azul-festa);
+  }
+  .link-azul:hover {
+      text-decoration: underline;
+  }
+  
+
+/*.body{
    background-color: rgba(138, 43, 226, 0.2);  
 } 
 
@@ -13,4 +51,4 @@
 
   #rodape {
      background-color: rgba(138, 43, 226, 0.8); /* Com transparência (alpha) */
- }
+ }*/

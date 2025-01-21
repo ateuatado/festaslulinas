@@ -35,7 +35,9 @@
   .link-azul:hover {
       text-decoration: underline;
   }
-  
+  .navbar-nav .nav-item .nav-link:hover {
+    font-weight: bold;
+}
 
 /*.body{
    background-color: rgba(138, 43, 226, 0.2);  

@@ -1,0 +1,55 @@
+###############################################
+# CodeIgniter 4 — .gitignore
+###############################################
+
+# Dependências do Composer (reproduzíveis via `composer install`)
+/vendor/
+
+# Framework CI4 — gerenciado pelo composer, não versionar
+/system/
+
+# Configuração de ambiente — NUNCA versione o .env real
+.env
+
+# Arquivos gerados pelo CI4
+/writable/cache/*
+/writable/logs/*
+/writable/session/*
+/writable/temp/*
+/writable/uploads/*
+/writable/debugbar/*
+!/writable/cache/.gitkeep
+!/writable/logs/.gitkeep
+!/writable/session/.gitkeep
+!/writable/temp/.gitkeep
+!/writable/uploads/.gitkeep
+
+# Uploads de usuários (fotos, mídias) — não vão para o git
+/public/uploads/
+
+# Dump SQL local — não versionar dados
+/sql/
+
+# Arquivos de IDE e sistema operacional
+.idea/
+.vscode/
+*.DS_Store
+Thumbs.db
+desktop.ini
+
+# PHPUnit cache
+.phpunit.cache/
+.phpunit.result.cache
+
+# Node (caso use compilação de assets futuramente)
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# Arquivos de sistema Windows
+$RECYCLE.BIN/
+
+###############################################
+# Banco de dados — scripts SQL de referência
+# A pasta /sql/ pode ser versionada (contém migrations de referência)
+###############################################

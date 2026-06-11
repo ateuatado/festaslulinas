@@ -8,11 +8,11 @@ use CodeIgniter\Test\FeatureTestTrait;
 use Tests\Support\Database\Seeds\LulinasSeeder;
 
 /**
- * AdminTest — verifica o painel de administração.
+ * AdminTest â€” verifica o painel de administraÃ§Ã£o.
  *
- * Testa controle de acesso (ID=1), moderação de mídias,
- * CRUD de produtos e gestão de festas.
- * Inclui regressão dos BUGs 2 e 4.
+ * Testa controle de acesso (ID=1), moderaÃ§Ã£o de mÃ­dias,
+ * CRUD de produtos e gestÃ£o de festas.
+ * Inclui regressÃ£o dos BUGs 2 e 4.
  *
  * @internal
  */
@@ -21,8 +21,11 @@ final class AdminTest extends CIUnitTestCase
     use DatabaseTestTrait;
     use FeatureTestTrait;
 
-    protected $seed    = LulinasSeeder::class;
-    protected $migrate = true;
+    protected $seed      = LulinasSeeder::class;
+    protected $basePath   = ROOTPATH . 'tests/_support/Database';
+    protected $namespace  = null; // migra App + Shield
+    protected $migrate    = true;
+    protected $refresh    = true;
 
     // ================================================================
     // Controle de Acesso
@@ -31,39 +34,39 @@ final class AdminTest extends CIUnitTestCase
     public function testAdminRedirecionaSemLogin(): void
     {
         $result = $this->get('admin');
-        $this->assertTrue($result->isRedirect(), 'Admin deve exigir autenticação');
+        $this->assertTrue($result->isRedirect(), 'Admin deve exigir autenticaÃ§Ã£o');
     }
 
     public function testAdminBloqueiaUsuarioNaoAdmin(): void
     {
-        // user_id=2 não é ID=1, deve ser bloqueado
+        // user_id=2 nÃ£o Ã© ID=1, deve ser bloqueado
         $result = $this->withSession(['user_id' => 2])->get('admin');
         // Deve retornar 404 (conforme checkAdmin()) ou redirecionar
         $this->assertNotEquals(200, $result->getStatusCode(),
-            'Usuário não-admin não deve acessar o painel admin'
+            'UsuÃ¡rio nÃ£o-admin nÃ£o deve acessar o painel admin'
         );
     }
 
     public function testAdminPermiteUsuarioId1(): void
     {
-        // user_id=1 é o admin pelo ID fixo atual
+        // user_id=1 Ã© o admin pelo ID fixo atual
         $result = $this->withSession(['user_id' => 1])->get('admin');
         $this->assertNotEquals(500, $result->getStatusCode(),
-            'Não deve haver erro 500 no admin para usuário válido'
+            'NÃ£o deve haver erro 500 no admin para usuÃ¡rio vÃ¡lido'
         );
     }
 
     // ================================================================
-    // Moderação de Mídias
+    // ModeraÃ§Ã£o de MÃ­dias
     // ================================================================
 
     public function testAdminPodeAprovarMidia(): void
     {
         $result = $this->withSession(['user_id' => 1])->get('admin/midia/1/aprovado');
-        // Não deve causar erro 500 — redirecionar ou processar
+        // NÃ£o deve causar erro 500 â€” redirecionar ou processar
         $this->assertNotEquals(500, $result->getStatusCode());
-        // Nota: verificação de banco omitida pois autenticação via sessão simples
-        // não é processada pelo Shield em ambiente de testes sem login completo.
+        // Nota: verificaÃ§Ã£o de banco omitida pois autenticaÃ§Ã£o via sessÃ£o simples
+        // nÃ£o Ã© processada pelo Shield em ambiente de testes sem login completo.
     }
 
     public function testAdminPodeRejeitarMidia(): void
@@ -74,21 +77,21 @@ final class AdminTest extends CIUnitTestCase
 
     public function testStatusMidiaInvalidoRetornaErro(): void
     {
-        // Status 'hackeado' não é válido
+        // Status 'hackeado' nÃ£o Ã© vÃ¡lido
         $result = $this->withSession(['user_id' => 1])->get('admin/midia/1/hackeado');
         $this->assertNotEquals(500, $result->getStatusCode());
-        // Deve redirecionar com mensagem de erro, não processar
+        // Deve redirecionar com mensagem de erro, nÃ£o processar
         $this->assertTrue($result->isRedirect());
     }
 
     // ================================================================
-    // Produtos (BUG 2 regression: excluirProduto agora é POST)
+    // Produtos (BUG 2 regression: excluirProduto agora Ã© POST)
     // ================================================================
 
     public function testExcluirProdutoViaGetRetorna404(): void
     {
-        // Após BUG 2 fix, GET /admin/excluirProduto/:id não deve funcionar
-        // O CI4 FeatureTest lança PageNotFoundException para rotas inexistentes
+        // ApÃ³s BUG 2 fix, GET /admin/excluirProduto/:id nÃ£o deve funcionar
+        // O CI4 FeatureTest lanÃ§a PageNotFoundException para rotas inexistentes
         $this->expectException(\CodeIgniter\Exceptions\PageNotFoundException::class);
         $this->withSession(['user_id' => 1])->get('admin/excluirProduto/1');
     }
@@ -106,12 +109,12 @@ final class AdminTest extends CIUnitTestCase
     }
 
     // ================================================================
-    // Festas (BUG 2 regression: excluirFesta agora é POST)
+    // Festas (BUG 2 regression: excluirFesta agora Ã© POST)
     // ================================================================
 
     public function testExcluirFestaViaGetRetorna404(): void
     {
-        // O CI4 FeatureTest lança PageNotFoundException para rotas inexistentes
+        // O CI4 FeatureTest lanÃ§a PageNotFoundException para rotas inexistentes
         $this->expectException(\CodeIgniter\Exceptions\PageNotFoundException::class);
         $this->withSession(['user_id' => 1])->get('admin/excluirFesta/1');
     }
@@ -123,12 +126,12 @@ final class AdminTest extends CIUnitTestCase
     }
 
     // ================================================================
-    // Apoiadores (BUG 2 regression: delete agora é POST)
+    // Apoiadores (BUG 2 regression: delete agora Ã© POST)
     // ================================================================
 
     public function testDeleteApoiadorViaGetRetorna404(): void
     {
-        // O CI4 FeatureTest lança PageNotFoundException para rotas inexistentes
+        // O CI4 FeatureTest lanÃ§a PageNotFoundException para rotas inexistentes
         $this->expectException(\CodeIgniter\Exceptions\PageNotFoundException::class);
         $this->withSession(['user_id' => 1])->get('admin/apoiadores/delete/1');
     }
@@ -139,3 +142,4 @@ final class AdminTest extends CIUnitTestCase
         $this->assertNotEquals(500, $result->getStatusCode());
     }
 }
+

@@ -12,7 +12,7 @@ use App\Models\FestaModel;
 use App\Models\MidiaModel;
 
 /**
- * DatabaseIntegrityTest — testa integridade de dados, transações e soft deletes.
+ * DatabaseIntegrityTest â€” testa integridade de dados, transaÃ§Ãµes e soft deletes.
  *
  * @internal
  */
@@ -20,8 +20,11 @@ final class DatabaseIntegrityTest extends CIUnitTestCase
 {
     use DatabaseTestTrait;
 
-    protected $seed    = LulinasSeeder::class;
-    protected $migrate = true;
+    protected $seed      = LulinasSeeder::class;
+    protected $basePath   = ROOTPATH . 'tests/_support/Database';
+    protected $namespace  = null;
+    protected $migrate    = true;
+    protected $refresh    = true;
 
     // ================================================================
     // Soft Delete
@@ -33,7 +36,7 @@ final class DatabaseIntegrityTest extends CIUnitTestCase
         $model->delete(1); // soft delete
 
         $resultado = $model->find(1);
-        $this->assertNull($resultado, 'Festa com soft delete não deve ser retornada pelo find()');
+        $this->assertNull($resultado, 'Festa com soft delete nÃ£o deve ser retornada pelo find()');
     }
 
     public function testFestaSoftDeleteadas(): void
@@ -41,9 +44,9 @@ final class DatabaseIntegrityTest extends CIUnitTestCase
         $model = new FestaModel();
         $model->delete(1);
 
-        // withDeleted deve encontrá-la
+        // withDeleted deve encontrÃ¡-la
         $resultado = $model->withDeleted()->find(1);
-        $this->assertNotNull($resultado, 'withDeleted() deve encontrar a festa excluída');
+        $this->assertNotNull($resultado, 'withDeleted() deve encontrar a festa excluÃ­da');
         $this->assertNotNull($resultado['deleted_at'], 'deleted_at deve estar preenchido');
     }
 
@@ -53,11 +56,11 @@ final class DatabaseIntegrityTest extends CIUnitTestCase
         $model->delete(1);
 
         $resultado = $model->find(1);
-        $this->assertNull($resultado, 'Produto com soft delete não deve aparecer no find()');
+        $this->assertNull($resultado, 'Produto com soft delete nÃ£o deve aparecer no find()');
     }
 
     // ================================================================
-    // Transação de Pedido (garante atomicidade)
+    // TransaÃ§Ã£o de Pedido (garante atomicidade)
     // ================================================================
 
     public function testCriarPedidoComItensMantemConsistencia(): void
@@ -79,7 +82,7 @@ final class DatabaseIntegrityTest extends CIUnitTestCase
 
         $db->transComplete();
 
-        $this->assertTrue($db->transStatus(), 'Transação deve completar com sucesso');
+        $this->assertTrue($db->transStatus(), 'TransaÃ§Ã£o deve completar com sucesso');
 
         // Verifica pedido
         $pedido = $pedidoModel->find($pedidoId);
@@ -115,19 +118,19 @@ final class DatabaseIntegrityTest extends CIUnitTestCase
     }
 
     // ================================================================
-    // Integridade das Mídias
+    // Integridade das MÃ­dias
     // ================================================================
 
     public function testMidiaPendenteNaoAparecaNaPaginaPublica(): void
     {
         $model = new MidiaModel();
 
-        // Mídias aprovadas para a festa 1
+        // MÃ­dias aprovadas para a festa 1
         $aprovadas = $model->where('festa_id', 1)->where('status', 'aprovado')->findAll();
 
         foreach ($aprovadas as $midia) {
             $this->assertEquals('aprovado', $midia['status'],
-                'Apenas mídias aprovadas devem aparecer na página pública'
+                'Apenas mÃ­dias aprovadas devem aparecer na pÃ¡gina pÃºblica'
             );
         }
     }
@@ -143,10 +146,10 @@ final class DatabaseIntegrityTest extends CIUnitTestCase
     }
 
     // ================================================================
-    // ProdutoModel — campo preco (BUG 1 regression)
+    // ProdutoModel â€” campo preco (BUG 1 regression)
     // ================================================================
 
-    public function testSalvarProdutoComPrecoViaMantémValor(): void
+    public function testSalvarProdutoComPrecoViaMantÃ©mValor(): void
     {
         $model = new ProdutoModel();
 
@@ -165,7 +168,7 @@ final class DatabaseIntegrityTest extends CIUnitTestCase
         );
     }
 
-    public function testAtualizarPrecoViaMantémNovoValor(): void
+    public function testAtualizarPrecoViaMantÃ©mNovoValor(): void
     {
         $model = new ProdutoModel();
 
@@ -173,7 +176,8 @@ final class DatabaseIntegrityTest extends CIUnitTestCase
         $produto = $model->find(1);
 
         $this->assertEquals('199.99', number_format((float) $produto['preco'], 2, '.', ''),
-            'BUG 1 Regression: atualização de preco via Model deve funcionar'
+            'BUG 1 Regression: atualizaÃ§Ã£o de preco via Model deve funcionar'
         );
     }
 }
+

@@ -8,7 +8,7 @@ use CodeIgniter\Test\FeatureTestTrait;
 use Tests\Support\Database\Seeds\LulinasSeeder;
 
 /**
- * LojaTest — testa a loja pública e pedidos vinculados a festas.
+ * LojaTest â€” testa a loja pÃºblica e pedidos vinculados a festas.
  *
  * @internal
  */
@@ -17,11 +17,14 @@ final class LojaTest extends CIUnitTestCase
     use DatabaseTestTrait;
     use FeatureTestTrait;
 
-    protected $seed    = LulinasSeeder::class;
-    protected $migrate = true;
+    protected $seed      = LulinasSeeder::class;
+    protected $basePath   = ROOTPATH . 'tests/_support/Database';
+    protected $namespace  = null;
+    protected $migrate    = true;
+    protected $refresh    = true;
 
     // ================================================================
-    // Loja Pública (sem autenticação)
+    // Loja PÃºblica (sem autenticaÃ§Ã£o)
     // ================================================================
 
     public function testLojaPublicaRetorna200(): void
@@ -33,7 +36,7 @@ final class LojaTest extends CIUnitTestCase
     public function testLojaPublicaEstaAcessivelSemLogin(): void
     {
         $result = $this->get('loja');
-        $this->assertFalse($result->isRedirect(), 'Loja pública deve ser acessível sem login');
+        $this->assertFalse($result->isRedirect(), 'Loja pÃºblica deve ser acessÃ­vel sem login');
     }
 
     // ================================================================
@@ -42,8 +45,8 @@ final class LojaTest extends CIUnitTestCase
 
     public function testRotaDuplicadaLojaPostSemFestaIdNaoExisteMais(): void
     {
-        // Após o BUG 4 fix, POST /loja/salvar (sem festaId numérico) não deve existir
-        // O CI4 FeatureTest lança PageNotFoundException para rotas inexistentes
+        // ApÃ³s o BUG 4 fix, POST /loja/salvar (sem festaId numÃ©rico) nÃ£o deve existir
+        // O CI4 FeatureTest lanÃ§a PageNotFoundException para rotas inexistentes
         $this->expectException(\CodeIgniter\Exceptions\PageNotFoundException::class);
         $this->post('loja/salvar', ['quantidades' => [1 => 5]]);
     }
@@ -55,7 +58,7 @@ final class LojaTest extends CIUnitTestCase
     public function testLojaVinculadaRedirecionaSemLogin(): void
     {
         $result = $this->get('loja/1');
-        $this->assertTrue($result->isRedirect(), 'Loja vinculada à festa deve exigir autenticação');
+        $this->assertTrue($result->isRedirect(), 'Loja vinculada Ã  festa deve exigir autenticaÃ§Ã£o');
     }
 
     public function testLojaVinculadaComFestaDeOutroUsuarioRedirecionaDashboard(): void
@@ -63,12 +66,12 @@ final class LojaTest extends CIUnitTestCase
         // user_id=1 tenta acessar loja com festa_id=1 (que pertence ao user_id=2)
         $result = $this->withSession(['user_id' => 1])->get('loja/1');
         $this->assertNotEquals(500, $result->getStatusCode());
-        $this->assertTrue($result->isRedirect(), 'Deve redirecionar para dashboard ao acessar festa de outro usuário');
+        $this->assertTrue($result->isRedirect(), 'Deve redirecionar para dashboard ao acessar festa de outro usuÃ¡rio');
     }
 
     public function testLojaVinculadaComFestaDoProprioUsuarioRetornaConteudo(): void
     {
-        // user_id=2 acessa a loja com festa_id=1 (que é dele)
+        // user_id=2 acessa a loja com festa_id=1 (que Ã© dele)
         $result = $this->withSession(['user_id' => 2])->get('loja/1');
         $this->assertNotEquals(500, $result->getStatusCode());
     }
@@ -100,10 +103,10 @@ final class LojaTest extends CIUnitTestCase
         ]);
         $this->assertNotEquals(500, $result->getStatusCode());
 
-        // Verifica se o pedido foi criado (quando usuário autenticado via Shield)
+        // Verifica se o pedido foi criado (quando usuÃ¡rio autenticado via Shield)
         $db     = \Config\Database::connect();
         $pedido = $db->table('pedidos')->where('festa_id', 1)->orderBy('id', 'DESC')->get()->getRowArray();
-        // Se o Shield autentica via sessão nos testes, o pedido estará lá
+        // Se o Shield autentica via sessÃ£o nos testes, o pedido estarÃ¡ lÃ¡
         if ($pedido !== null) {
             $this->assertEquals('Solicitado', $pedido['status']);
         }
@@ -111,12 +114,13 @@ final class LojaTest extends CIUnitTestCase
 
     public function testSalvarPedidoFestaDeOutroUsuarioEhBloqueado(): void
     {
-        // user_id=1 tenta fazer pedido para festa_id=1 (que é do user_id=2)
+        // user_id=1 tenta fazer pedido para festa_id=1 (que Ã© do user_id=2)
         $result = $this->withSession(['user_id' => 1])->post('loja/salvar/1', [
             'quantidades' => [1 => 10],
         ]);
         $this->assertNotEquals(500, $result->getStatusCode());
-        // Deve redirecionar para dashboard como erro de autorização
+        // Deve redirecionar para dashboard como erro de autorizaÃ§Ã£o
         $this->assertTrue($result->isRedirect());
     }
 }
+

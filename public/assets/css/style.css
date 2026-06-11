@@ -1,12 +1,309 @@
-/* public/assets/css/style.css */
+/* ============================================================
+   FESTAS LULINAS - CSS Principal
+   Identidade: Brasil Lulino - Nacao Soberana
+   Paleta: Azul Arara #1565C0 | Ouro #C9971C | Vermelho #C8102E | Preto #111
+   ============================================================ */
 
-.bg-lulina-nav {
-    background-color: #FFB127 !important;
+/* Fontes carregadas via link no main.php */
+
+/* ---- Variaveis ------------------------------------------- */
+:root {
+    --lulina-azul:       #1565C0;
+    --lulina-azul-hover: #0D47A1;
+    --lulina-ouro:       #C9971C;
+    --lulina-ouro-claro: #F0B429;
+    --lulina-vermelho:   #C8102E;
+    --lulina-preto:      #111111;
+    --lulina-branco:     #FAFAF5;
+    --font-display: 'Bebas Neue', Impact, sans-serif;
+    --font-heading: 'Barlow Condensed', Arial Narrow, sans-serif;
+    --font-body:    'Barlow', Arial, sans-serif;
 }
 
-/* Ajuste opcional: Se quiser mudar a cor do link ativo ou hover para vermelho */
-.navbar-nav .nav-link:hover, 
-.navbar-nav .nav-link.active {
-    color: #d32f2f !important; /* Vermelho */
-    font-weight: bold;
+/* ---- Base ------------------------------------------------ */
+body {
+    font-family: var(--font-body);
+}
+
+/* ---- Navbar Azul Arara ----------------------------------- */
+.navbar-lulina {
+    background-color: var(--lulina-azul) !important;
+    border-bottom: 3px solid var(--lulina-ouro);
+}
+
+.navbar-lulina .navbar-brand {
+    font-family: var(--font-display);
+    font-size: 1.8rem;
+    letter-spacing: 0.05em;
+    color: #ffffff !important;
+}
+
+.navbar-lulina .navbar-brand:hover {
+    color: var(--lulina-ouro-claro) !important;
+}
+
+.navbar-lulina .nav-link {
+    font-family: var(--font-heading);
+    font-weight: 600;
+    font-size: 1rem;
+    color: #ffffff !important;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+.navbar-lulina .nav-link:hover,
+.navbar-lulina .nav-link.active {
+    color: var(--lulina-ouro-claro) !important;
+    font-weight: 700;
+}
+
+.navbar-lulina .navbar-toggler {
+    border-color: rgba(255,255,255,0.5);
+}
+
+/* ---- Carrossel ------------------------------------------- */
+.hero-carousel {
+    width: 100%;
+    background-color: #000;
+    border-bottom: 4px solid var(--lulina-ouro);
+}
+
+.hero-carousel .carousel-item img {
+    width: 100%;
+    max-height: 70vh;
+    object-fit: cover;
+    object-position: center;
+}
+
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+    background-color: var(--lulina-ouro);
+    border-radius: 50%;
+    padding: 1.1rem;
+    background-size: 55%;
+}
+
+.carousel-indicators [data-bs-target] {
+    background-color: var(--lulina-ouro);
+    border-radius: 50%;
+    width: 10px;
+    height: 10px;
+    border-top: none;
+    border-bottom: none;
+    opacity: 0.6;
+}
+
+.carousel-indicators .active {
+    opacity: 1;
+    transform: scale(1.3);
+}
+
+/* ---- Faixa CTA ------------------------------------------ */
+.faixa-cta {
+    background-color: var(--lulina-ouro);
+    border-bottom: 3px solid var(--lulina-preto);
+    padding: 1rem 0;
+}
+
+.faixa-cta .cta-text {
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: 1.05rem;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    color: var(--lulina-preto);
+    margin: 0;
+}
+
+/* ---- Botoes ---------------------------------------------- */
+.btn-lulina-preto {
+    background-color: #111111;
+    color: #C9971C !important;
+    font-family: var(--font-heading);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    border: 2px solid #111111;
+    padding: 0.5rem 1.5rem;
+    transition: all 0.2s;
+}
+.btn-lulina-preto:hover {
+    background-color: var(--lulina-vermelho);
+    border-color: var(--lulina-vermelho);
+    color: #fff !important;
+}
+
+.btn-lulina-vermelho {
+    background-color: var(--lulina-vermelho);
+    color: #fff !important;
+    font-family: var(--font-heading);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    border: 2px solid var(--lulina-vermelho);
+    padding: 0.5rem 1.5rem;
+    transition: all 0.2s;
+}
+.btn-lulina-vermelho:hover {
+    background-color: #a00d24;
+    border-color: #a00d24;
+    transform: translateY(-2px);
+}
+
+.btn-lulina-outline-ouro {
+    background-color: transparent;
+    color: var(--lulina-ouro) !important;
+    font-family: var(--font-heading);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    border: 2px solid var(--lulina-ouro);
+    padding: 0.5rem 1.5rem;
+    transition: all 0.2s;
+}
+.btn-lulina-outline-ouro:hover {
+    background-color: var(--lulina-ouro);
+    color: #111 !important;
+}
+
+/* ---- Secao Poster ---------------------------------------- */
+.secao-poster {
+    background-color: #111111;
+    padding: 4rem 0;
+    border-top: 4px solid var(--lulina-ouro);
+    border-bottom: 4px solid var(--lulina-ouro);
+}
+
+.secao-poster h2 {
+    font-family: var(--font-display);
+    font-size: 3rem;
+    letter-spacing: 0.05em;
+    color: var(--lulina-ouro);
+    line-height: 1.05;
+}
+
+.secao-poster .datas {
+    font-family: var(--font-heading);
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--lulina-ouro-claro);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    border-left: 4px solid var(--lulina-vermelho);
+    padding-left: 1rem;
+    margin: 1rem 0;
+}
+
+.secao-poster p {
+    color: #cccccc;
+    font-size: 1rem;
+    line-height: 1.6;
+}
+
+.poster-img {
+    max-width: 320px;
+    width: 100%;
+    border: 4px solid var(--lulina-ouro);
+    border-radius: 8px;
+    box-shadow: 0 8px 32px rgba(201,151,28,0.3);
+    transition: transform 0.25s;
+}
+
+.poster-img:hover {
+    transform: scale(1.02);
+}
+
+/* ---- Secao Apoiadores ------------------------------------ */
+.secao-apoiadores {
+    background-color: #F5F0E8;
+    padding: 4rem 0;
+    border-top: 4px solid var(--lulina-ouro);
+}
+
+.secao-apoiadores h2 {
+    font-family: var(--font-display);
+    font-size: 2.5rem;
+    letter-spacing: 0.04em;
+    color: var(--lulina-preto);
+}
+
+.apoiador-card {
+    transition: transform 0.2s;
+    cursor: default;
+}
+
+.apoiador-card:hover {
+    transform: translateY(-5px);
+}
+
+.apoiador-foto {
+    width: 110px;
+    height: 110px;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 4px solid var(--lulina-ouro);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    display: block;
+    margin: 0 auto;
+    transition: border-color 0.2s;
+}
+
+.apoiador-card:hover .apoiador-foto {
+    border-color: var(--lulina-vermelho);
+}
+
+.apoiador-card h5 {
+    font-family: var(--font-heading);
+    font-size: 1rem;
+    font-weight: 700;
+    margin-top: 0.6rem;
+    margin-bottom: 0.1rem;
+    color: #111;
+}
+
+/* ---- Footer --------------------------------------------- */
+.footer-lulina {
+    background-color: #111111;
+    border-top: 4px solid var(--lulina-ouro);
+    color: #aaaaaa;
+}
+
+.footer-lulina h5,
+.footer-lulina h6 {
+    font-family: var(--font-display);
+    letter-spacing: 0.05em;
+    color: var(--lulina-ouro);
+}
+
+.footer-lulina a {
+    color: #cccccc;
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.footer-lulina a:hover {
+    color: var(--lulina-ouro);
+}
+
+.hover-link:hover {
+    color: var(--lulina-ouro) !important;
+    text-decoration: underline !important;
+}
+
+/* ---- Utilitarios ----------------------------------------- */
+.text-ouro     { color: var(--lulina-ouro) !important; }
+.bg-ouro       { background-color: var(--lulina-ouro) !important; }
+.bg-lulina-nav { background-color: var(--lulina-azul) !important; }
+
+/* ---- Responsivo ------------------------------------------ */
+@media (max-width: 768px) {
+    .hero-carousel .carousel-item img {
+        max-height: 50vw;
+    }
+    .secao-poster h2 {
+        font-size: 2rem;
+    }
+    .poster-img {
+        max-width: 240px;
+    }
 }

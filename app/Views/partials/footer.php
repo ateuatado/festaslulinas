@@ -1,4 +1,4 @@
-<footer class="bg-dark text-white pt-5 pb-3 mt-auto border-top border-4 border-warning">
+<footer class="footer-lulina pt-5 pb-3 mt-auto">
     <div class="container">
         <div class="row g-4">
             

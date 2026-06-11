@@ -8,7 +8,7 @@ use CodeIgniter\Test\FeatureTestTrait;
 use Tests\Support\Database\Seeds\LulinasSeeder;
 
 /**
- * DashboardTest — verifica autenticação e CRUD de festas pelo organizador.
+ * DashboardTest â€” verifica autenticaÃ§Ã£o e CRUD de festas pelo organizador.
  *
  * @internal
  */
@@ -17,18 +17,21 @@ final class DashboardTest extends CIUnitTestCase
     use DatabaseTestTrait;
     use FeatureTestTrait;
 
-    protected $seed    = LulinasSeeder::class;
-    protected $migrate = true;
+    protected $seed      = LulinasSeeder::class;
+    protected $basePath   = ROOTPATH . 'tests/_support/Database';
+    protected $namespace  = null;
+    protected $migrate    = true;
+    protected $refresh    = true;
 
     // ================================================================
-    // Proteção de Acesso
+    // ProteÃ§Ã£o de Acesso
     // ================================================================
 
     public function testDashboardRedirecionaSemLogin(): void
     {
         $result = $this->get('dashboard');
-        // Deve redirecionar para login quando não autenticado
-        $this->assertTrue($result->isRedirect(), 'Dashboard deve exigir autenticação');
+        // Deve redirecionar para login quando nÃ£o autenticado
+        $this->assertTrue($result->isRedirect(), 'Dashboard deve exigir autenticaÃ§Ã£o');
     }
 
     // ================================================================
@@ -38,12 +41,12 @@ final class DashboardTest extends CIUnitTestCase
     public function testDashboardRetorna200ComUsuarioLogado(): void
     {
         $result = $this->withSession(['user_id' => 2])->get('dashboard');
-        // Mesmo que o Shield use sessão diferente, deve responder (200 ou redirect)
-        $this->assertNotEquals(500, $result->getStatusCode(), 'Não deve haver erro 500 no dashboard');
+        // Mesmo que o Shield use sessÃ£o diferente, deve responder (200 ou redirect)
+        $this->assertNotEquals(500, $result->getStatusCode(), 'NÃ£o deve haver erro 500 no dashboard');
     }
 
     // ================================================================
-    // Validação — Criar Festa
+    // ValidaÃ§Ã£o â€” Criar Festa
     // ================================================================
 
     public function testCriarFestaComDadosValidosRetornaSucesso(): void
@@ -59,14 +62,14 @@ final class DashboardTest extends CIUnitTestCase
             'condicoes_acesso' => 'Gratuito',
             'descricao'        => 'Festa de teste via PHPUnit',
         ]);
-        // Deve redirecionar (sucesso) ou retornar 200 — nunca 500
+        // Deve redirecionar (sucesso) ou retornar 200 â€” nunca 500
         $this->assertNotEquals(500, $result->getStatusCode());
     }
 
     public function testCriarFestaSemNomeRetornaErroDeValidacao(): void
     {
         $result = $this->withSession(['user_id' => 2])->post('dashboard/salvar', [
-            'nome_festa'       => '', // Campo obrigatório vazio
+            'nome_festa'       => '', // Campo obrigatÃ³rio vazio
             'data_hora'        => '2026-09-01 18:00:00',
             'cidade'           => 'Campinas',
             'uf'               => 'SP',
@@ -74,7 +77,7 @@ final class DashboardTest extends CIUnitTestCase
             'organizacao'      => 'PT',
             'condicoes_acesso' => 'Gratuito',
         ]);
-        // Nome ausente → não pode redirecionar para sucesso
+        // Nome ausente â†’ nÃ£o pode redirecionar para sucesso
         $this->assertNotEquals(500, $result->getStatusCode());
     }
 
@@ -93,14 +96,14 @@ final class DashboardTest extends CIUnitTestCase
     }
 
     // ================================================================
-    // Proteção de ownership (editar festa de outro usuário)
+    // ProteÃ§Ã£o de ownership (editar festa de outro usuÃ¡rio)
     // ================================================================
 
     public function testEditarFestaDeOutroUsuarioRedirecionaDashboard(): void
     {
         // Festa ID 1 pertence ao user_id=2; user_id=1 tenta editar
         $result = $this->withSession(['user_id' => 1])->get('dashboard/editar/1');
-        // Deve redirecionar (sem acesso) — não pode retornar 200 com dados da festa
+        // Deve redirecionar (sem acesso) â€” nÃ£o pode retornar 200 com dados da festa
         $this->assertNotEquals(500, $result->getStatusCode());
     }
 
@@ -110,21 +113,22 @@ final class DashboardTest extends CIUnitTestCase
 
     public function testExcluirFestaDoProprioUsuario(): void
     {
-        // User 2 exclui a festa 1 (que é dele)
+        // User 2 exclui a festa 1 (que Ã© dele)
         $result = $this->withSession(['user_id' => 2])->get('dashboard/excluir/1');
         $this->assertNotEquals(500, $result->getStatusCode());
 
         // Verifica soft delete no banco
-        // Nota: o Shield pode não reconhecer a sessão simples nos testes,
-        // o que pode causar redirect antes do soft delete. Ambos os cenários são válidos.
+        // Nota: o Shield pode nÃ£o reconhecer a sessÃ£o simples nos testes,
+        // o que pode causar redirect antes do soft delete. Ambos os cenÃ¡rios sÃ£o vÃ¡lidos.
         $db    = \Config\Database::connect();
         $festa = $db->table('festas')->where('id', 1)->get()->getRowArray();
-        // Se a festa foi encontrada COM deleted_at → soft delete ocorreu com sucesso
-        // Se não foi encontrada (sem withDeleted) → soft delete OK (TRUNCATE limpa entre testes)
-        // Se deleted_at for null → a autenticação não funcionou (cenário aceitável nos testes)
+        // Se a festa foi encontrada COM deleted_at â†’ soft delete ocorreu com sucesso
+        // Se nÃ£o foi encontrada (sem withDeleted) â†’ soft delete OK (TRUNCATE limpa entre testes)
+        // Se deleted_at for null â†’ a autenticaÃ§Ã£o nÃ£o funcionou (cenÃ¡rio aceitÃ¡vel nos testes)
         $this->assertTrue(
             $festa === null || $festa['deleted_at'] !== null || $result->isRedirect(),
-            'A festa deve ter sido excluída (soft delete) ou o sistema deve ter redirecionado'
+            'A festa deve ter sido excluÃ­da (soft delete) ou o sistema deve ter redirecionado'
         );
     }
 }
+

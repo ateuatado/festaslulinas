@@ -8,9 +8,9 @@ use CodeIgniter\Test\FeatureTestTrait;
 use Tests\Support\Database\Seeds\LulinasSeeder;
 
 /**
- * GaleriaTest — testa upload, listagem e remoção de mídias.
+ * GaleriaTest â€” testa upload, listagem e remoÃ§Ã£o de mÃ­dias.
  *
- * Inclui teste de regressão para o BUG 3 (validação de upload).
+ * Inclui teste de regressÃ£o para o BUG 3 (validaÃ§Ã£o de upload).
  *
  * @internal
  */
@@ -19,17 +19,20 @@ final class GaleriaTest extends CIUnitTestCase
     use DatabaseTestTrait;
     use FeatureTestTrait;
 
-    protected $seed    = LulinasSeeder::class;
-    protected $migrate = true;
+    protected $seed      = LulinasSeeder::class;
+    protected $basePath   = ROOTPATH . 'tests/_support/Database';
+    protected $namespace  = null;
+    protected $migrate    = true;
+    protected $refresh    = true;
 
     // ================================================================
-    // Proteção de acesso
+    // ProteÃ§Ã£o de acesso
     // ================================================================
 
     public function testGaleriaRedirecionaSemLogin(): void
     {
         $result = $this->get('galeria/1');
-        $this->assertTrue($result->isRedirect(), 'Galeria deve exigir autenticação');
+        $this->assertTrue($result->isRedirect(), 'Galeria deve exigir autenticaÃ§Ã£o');
     }
 
     public function testGaleriaBloqueiaDonoDiferenteDaFesta(): void
@@ -38,54 +41,54 @@ final class GaleriaTest extends CIUnitTestCase
         $result = $this->withSession(['user_id' => 1])->get('galeria/1');
         $this->assertNotEquals(500, $result->getStatusCode());
         // Deve redirecionar (sem acesso)
-        $this->assertTrue($result->isRedirect(), 'Não deve dar acesso à galeria de outro usuário');
+        $this->assertTrue($result->isRedirect(), 'NÃ£o deve dar acesso Ã  galeria de outro usuÃ¡rio');
     }
 
     public function testGaleriaAcessoCorretoDonoRetornaConteudo(): void
     {
-        // user_id=2 acessa galeria da festa 1 (que é dele)
+        // user_id=2 acessa galeria da festa 1 (que Ã© dele)
         $result = $this->withSession(['user_id' => 2])->get('galeria/1');
         $this->assertNotEquals(500, $result->getStatusCode());
     }
 
     // ================================================================
-    // BUG 3 Regression: Validação de upload deve rejeitar tipo inválido
+    // BUG 3 Regression: ValidaÃ§Ã£o de upload deve rejeitar tipo invÃ¡lido
     // ================================================================
 
     public function testUploadSemArquivosRetornaMensagemDeErro(): void
     {
         // POST sem arquivo algum
         $result = $this->withSession(['user_id' => 2])->post('galeria/upload/1', []);
-        // Não deve causar 500
+        // NÃ£o deve causar 500
         $this->assertNotEquals(500, $result->getStatusCode());
     }
 
     // ================================================================
-    // Deleção via POST (BUG 2 regression)
+    // DeleÃ§Ã£o via POST (BUG 2 regression)
     // ================================================================
 
     public function testDeleteMidiaViaGetNaoFunciona(): void
     {
-        // Após o BUG 2 fix, GET para delete deve lançar PageNotFoundException
-        // (o CI4 FeatureTest não captura como HTTP 404, mas propaga a exceção)
+        // ApÃ³s o BUG 2 fix, GET para delete deve lanÃ§ar PageNotFoundException
+        // (o CI4 FeatureTest nÃ£o captura como HTTP 404, mas propaga a exceÃ§Ã£o)
         $this->expectException(\CodeIgniter\Exceptions\PageNotFoundException::class);
         $this->get('galeria/delete/1');
     }
 
     public function testDeleteMidiaComPostFunciona(): void
     {
-        // POST correto para deletar a mídia 1 (pertence à festa do user_id=2)
+        // POST correto para deletar a mÃ­dia 1 (pertence Ã  festa do user_id=2)
         $result = $this->withSession(['user_id' => 2])->post('galeria/delete/1');
         $this->assertNotEquals(500, $result->getStatusCode());
     }
 
     public function testDeleteMidiaDeOutroUsuarioFalhaSilenciosamente(): void
     {
-        // user_id=1 tenta deletar mídia da festa do user_id=2
+        // user_id=1 tenta deletar mÃ­dia da festa do user_id=2
         $result = $this->withSession(['user_id' => 1])->post('galeria/delete/1');
         $this->assertNotEquals(500, $result->getStatusCode());
 
-        // Mídia deve continuar no banco
+        // MÃ­dia deve continuar no banco
         $db    = \Config\Database::connect();
         $midia = $db->table('midias')->where('id', 1)->get()->getRowArray();
         if ($midia !== null) {
@@ -94,3 +97,4 @@ final class GaleriaTest extends CIUnitTestCase
         }
     }
 }
+

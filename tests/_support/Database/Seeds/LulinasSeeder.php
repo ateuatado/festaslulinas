@@ -15,14 +15,19 @@ class LulinasSeeder extends Seeder
         $now = date('Y-m-d H:i:s');
 
         // ----------------------------------------------------------------
-        // 0. Limpa o banco de forma idempotente (compatível com MySQL)
-        //    Desabilita FK checks para permitir truncate na ordem correta.
+        // 0. Limpa o banco de forma idempotente (compatível com MySQL e SQLite)
+        //    SET FOREIGN_KEY_CHECKS é exclusivo do MySQL — ignorado no SQLite.
         // ----------------------------------------------------------------
-        $this->db->query('SET FOREIGN_KEY_CHECKS = 0');
+        $isMysql = $this->db->DBDriver === 'MySQLi';
+        if ($isMysql) {
+            $this->db->query('SET FOREIGN_KEY_CHECKS = 0');
+        }
         foreach (['pedidos_itens', 'pedidos', 'midias', 'festas', 'apoiadores', 'produtos', 'auth_identities', 'auth_groups_users', 'users'] as $table) {
             $this->db->table($table)->truncate();
         }
-        $this->db->query('SET FOREIGN_KEY_CHECKS = 1');
+        if ($isMysql) {
+            $this->db->query('SET FOREIGN_KEY_CHECKS = 1');
+        }
 
         // ----------------------------------------------------------------
         // 1. Usuários (tabela gerenciada pelo Shield)

@@ -8,7 +8,7 @@ use CodeIgniter\Test\FeatureTestTrait;
 use Tests\Support\Database\Seeds\LulinasSeeder;
 
 /**
- * HomeTest — testa a página pública inicial.
+ * HomeTest â€” testa a pÃ¡gina pÃºblica inicial.
  *
  * @internal
  */
@@ -17,8 +17,11 @@ final class HomeTest extends CIUnitTestCase
     use DatabaseTestTrait;
     use FeatureTestTrait;
 
-    protected $seed    = LulinasSeeder::class;
-    protected $migrate = true;
+    protected $seed      = LulinasSeeder::class;
+    protected $basePath   = ROOTPATH . 'tests/_support/Database';
+    protected $namespace  = null;
+    protected $migrate    = true;
+    protected $refresh    = true;
 
     public function testHomepageRetorna200(): void
     {
@@ -28,7 +31,7 @@ final class HomeTest extends CIUnitTestCase
 
     public function testHomepageEstaAcessivelSemLogin(): void
     {
-        // Não autentica ninguém — deve funcionar normalmente
+        // NÃ£o autentica ninguÃ©m â€” deve funcionar normalmente
         $result = $this->get('/');
         $result->assertStatus(200);
     }
@@ -36,7 +39,8 @@ final class HomeTest extends CIUnitTestCase
     public function testHomepageNaoRedirecionaParaLogin(): void
     {
         $result = $this->get('/');
-        // Não deve redirecionar para /login
-        $this->assertFalse($result->isRedirect(), 'A homepage não deve exigir autenticação');
+        // NÃ£o deve redirecionar para /login
+        $this->assertFalse($result->isRedirect(), 'A homepage nÃ£o deve exigir autenticaÃ§Ã£o');
     }
 }
+

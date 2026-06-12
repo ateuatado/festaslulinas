@@ -44,7 +44,7 @@
         </div>
     <?php else: ?>
         <div class="card shadow-sm">
-            <div class="table-responsive">
+            <div class="table-responsive" style="overflow: visible;">
                 <table class="table table-hover align-middle mb-0">
                     <thead class="table-light">
                         <tr>
@@ -65,7 +65,9 @@
                                 <td class="text-end">
                                     <div class="dropdown">
                                         <button class="btn btn-sm btn-outline-danger dropdown-toggle" type="button"
-                                                data-bs-toggle="dropdown" aria-expanded="false">
+                                                data-bs-toggle="dropdown"
+                                                data-bs-strategy="fixed"
+                                                aria-expanded="false">
                                             <i class="bi bi-grid-fill"></i> Gerenciar
                                         </button>
                                         <ul class="dropdown-menu dropdown-menu-end shadow">

@@ -1,6 +1,82 @@
 <?= $this->extend('layouts/main') ?>
 <?= $this->section('title') ?><?= esc($festa['nome_festa']) ?> — Festas Lulinas<?= $this->endSection() ?>
 
+<?= $this->section('meta') ?>
+<?php
+    // ─── Dados para Open Graph ─────────────────────────────────────────
+    $ogUrl   = base_url('festa/' . ($festa['slug'] ?: $festa['id']));
+
+    // Imagem: foto do festeiro > primeira midia aprovada > logo padrao
+    $ogImage = base_url('assets/img/og-default.jpg');
+    if (!empty($perfil['foto'])) {
+        $ogImage = base_url('uploads/perfil/' . $perfil['foto']);
+    } elseif (!empty($midias)) {
+        foreach ($midias as $_m) {
+            if (($_m['tipo'] ?? '') !== 'video') {
+                $ogImage = base_url('uploads/galeria/' . $_m['arquivo']);
+                break;
+            }
+        }
+    }
+
+    // Descricao rica: data + hora + endereco + organizacao
+    $dataFesta = date('d/m/Y', strtotime($festa['data_hora']));
+    $horaFesta = date('H:i',   strtotime($festa['data_hora']));
+    $endFesta  = trim(
+        ($festa['logradouro'] ? $festa['logradouro'] .
+            ($festa['numero'] ? ', ' . $festa['numero'] : '') . ' - ' : '') .
+        $festa['cidade'] . '/' . $festa['uf']
+    );
+    $ogDesc = $dataFesta . ' as ' . $horaFesta . ' - ' . $endFesta;
+    if (!empty($festa['organizacao']))   $ogDesc .= ' | ' . $festa['organizacao'];
+    if (!empty($festa['tamanho_festa'])) $ogDesc .= ' | ' . $festa['tamanho_festa'];
+?>
+<!-- Open Graph (WhatsApp, Telegram, Facebook, LinkedIn) -->
+<meta property="og:type"         content="website">
+<meta property="og:site_name"    content="Festas Lulinas">
+<meta property="og:url"          content="<?= esc($ogUrl) ?>">
+<meta property="og:title"        content="<?= esc($festa['nome_festa']) ?> — Festas Lulinas">
+<meta property="og:description"  content="<?= esc($ogDesc) ?>">
+<meta property="og:image"        content="<?= esc($ogImage) ?>">
+<meta property="og:image:width"  content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:locale"       content="pt_BR">
+<!-- Twitter / X Card -->
+<meta name="twitter:card"        content="summary_large_image">
+<meta name="twitter:title"       content="<?= esc($festa['nome_festa']) ?> — Festas Lulinas">
+<meta name="twitter:description" content="<?= esc($ogDesc) ?>">
+<meta name="twitter:image"       content="<?= esc($ogImage) ?>">
+<!-- Canonical URL (SEO) -->
+<link rel="canonical" href="<?= esc($ogUrl) ?>">
+<!-- Schema.org Event (Google rich results) -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Event",
+  "name": "<?= esc($festa['nome_festa']) ?>",
+  "startDate": "<?= date('c', strtotime($festa['data_hora'])) ?>",
+  "location": {
+    "@type": "Place",
+    "name": "<?= esc($festa['local_evento'] ?? ($festa['cidade'] . '/' . $festa['uf'])) ?>",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress":   "<?= esc(trim(($festa['logradouro'] ?? '') . ' ' . ($festa['numero'] ?? ''))) ?>",
+      "addressLocality": "<?= esc($festa['cidade'] ?? '') ?>",
+      "addressRegion":   "<?= esc($festa['uf'] ?? '') ?>",
+      "postalCode":      "<?= esc($festa['cep'] ?? '') ?>",
+      "addressCountry":  "BR"
+    }
+  },
+  "organizer": {
+    "@type": "Organization",
+    "name": "<?= esc($festa['organizacao'] ?? 'Festas Lulinas') ?>"
+  },
+  "image": "<?= esc($ogImage) ?>",
+  "url": "<?= esc($ogUrl) ?>"
+}
+</script>
+<?= $this->endSection() ?>
+
 <?= $this->section('content') ?>
 
 <!-- ══════════════════════════════════════════════════════ -->

@@ -13,6 +13,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;600;700;900&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
     <link href="<?= base_url('assets/css/style.css') ?>" rel="stylesheet">
     
+    <?= $this->renderSection('meta') ?>
     <?= $this->renderSection('css') ?>
 </head>
 <body class="d-flex flex-column min-vh-100">

@@ -25,16 +25,8 @@
                      class="d-block w-100"
                      alt="Festas Lulinas - De 13 de julho a 13 de agosto">
             </div>
-        </div>
+        </div><!-- /carousel-inner -->
 
-        <button class="carousel-control-prev" type="button" data-bs-target="#carrosselLulinas" data-bs-slide="prev">
-            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Anterior</span>
-        </button>
-        <button class="carousel-control-next" type="button" data-bs-target="#carrosselLulinas" data-bs-slide="next">
-            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Proximo</span>
-        </button>
     </div>
 </div>
 
@@ -50,7 +42,7 @@
         <!-- Linha 1: texto + botões -->
         <div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
             <p class="cta-text mb-0 fw-bold" style="text-transform:uppercase; letter-spacing:0.03em; color:#111;">
-                Organize seu comite, chame a comunidade e faca parte dessa historia.
+                Organize seu comitê, chame a comunidade e faça parte dessa história!
             </p>
             <div class="d-flex gap-3 flex-wrap">
                 <?php if (auth()->loggedIn()): ?>
@@ -74,7 +66,7 @@
                class="fw-semibold text-decoration-none"
                style="color:#111; font-size:.95rem;">
                 <i class="bi bi-map-fill me-1"></i>
-                Veja as festas que estão rolando &rarr;
+                Confira as Festas de 2026 &rarr;
             </a>
         </div>
 

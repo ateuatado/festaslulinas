@@ -1,17 +1,38 @@
 <?= $this->extend('layouts/main') ?>
-<?= $this->section('title') ?>Festas que Estão Rolando<?= $this->endSection() ?>
+<?= $this->section('title') ?>Festas <?= $ano ?><?= $this->endSection() ?>
 
 <?= $this->section('content') ?>
 
 <!-- Hero compacto -->
 <div class="py-4" style="background:linear-gradient(135deg,#b71c1c,#c62828,#7f0000); border-bottom:4px solid #C9971C;">
     <div class="container text-center text-white">
-        <h6 class="text-uppercase fw-bold mb-1" style="color:#C9971C;letter-spacing:.15em;font-size:.8rem;">
-            <i class="bi bi-star-fill me-1"></i> Brasil Lulino · 13 Jul – 13 Ago 2026
+        <h6 class="text-uppercase fw-bold mb-2" style="color:#C9971C;letter-spacing:.15em;font-size:.8rem;">
+            <i class="bi bi-star-fill me-1"></i> Brasil Lulino · 13 Jul – 13 Ago
         </h6>
-        <h1 class="fw-bold mb-2" style="font-family:'Bebas Neue',Impact,sans-serif;font-size:2.8rem;letter-spacing:.05em;">
-            Festas que estão rolando
-        </h1>
+
+        <!-- Título + Combo de ano na mesma linha -->
+        <div class="d-flex align-items-center justify-content-center gap-3 flex-wrap mb-2">
+            <h1 class="fw-bold mb-0" style="font-family:'Bebas Neue',Impact,sans-serif;font-size:2.8rem;letter-spacing:.05em;">
+                Festas
+            </h1>
+            <!-- Combo de ano -->
+            <form method="get" action="<?= base_url('festas') ?>" id="form-ano" class="mb-0">
+                <select name="ano" id="combo-ano"
+                        class="form-select form-select-lg fw-bold text-center"
+                        style="font-family:'Bebas Neue',Impact,sans-serif;font-size:2rem;
+                               background:#C9971C;color:#111;border:3px solid #111;
+                               border-radius:8px;padding:.2rem .8rem;cursor:pointer;
+                               appearance:none;-webkit-appearance:none;min-width:110px;"
+                        onchange="document.getElementById('form-ano').submit()">
+                    <?php foreach ($anos as $a): ?>
+                        <option value="<?= $a ?>" <?= $a === $ano ? 'selected' : '' ?>>
+                            <?= $a ?>
+                        </option>
+                    <?php endforeach; ?>
+                </select>
+            </form>
+        </div>
+
         <p class="mb-0" style="color:rgba(255,255,255,.8);font-size:1rem;">
             Encontre uma Festa Lulina perto de você e celebre o Brasil Lulino!
         </p>
@@ -23,12 +44,14 @@
     <?php if (empty($festas)): ?>
         <div class="text-center py-5 text-muted">
             <i class="bi bi-calendar-x fs-1 d-block mb-3"></i>
-            <h4>Nenhuma festa cadastrada ainda.</h4>
-            <p>As festas do período de 13 de julho a 13 de agosto serão divulgadas em breve!</p>
-            <?php if (!auth()->loggedIn()): ?>
-            <a href="<?= base_url('register') ?>" class="btn btn-danger btn-lg fw-bold mt-2">
-                <i class="bi bi-star-fill me-1"></i> Cadastre a sua!
-            </a>
+            <h4>Nenhuma festa encontrada em <?= $ano ?>.</h4>
+            <?php if ($ano == date('Y')): ?>
+                <p>As festas de <?= $ano ?> serão divulgadas em breve!</p>
+                <?php if (!auth()->loggedIn()): ?>
+                <a href="<?= base_url('register') ?>" class="btn btn-danger btn-lg fw-bold mt-2">
+                    <i class="bi bi-star-fill me-1"></i> Cadastre a sua!
+                </a>
+                <?php endif; ?>
             <?php endif; ?>
         </div>
 
@@ -38,7 +61,8 @@
         <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
             <h5 class="mb-0 fw-bold text-danger">
                 <i class="bi bi-geo-alt-fill me-2"></i>
-                <?= count($festas) ?> festa<?= count($festas) > 1 ? 's' : '' ?> encontrada<?= count($festas) > 1 ? 's' : '' ?>
+                <?= count($festas) ?> festa<?= count($festas) > 1 ? 's' : '' ?>
+                encontrada<?= count($festas) > 1 ? 's' : '' ?> em <?= $ano ?>
             </h5>
             <?php if (!auth()->loggedIn()): ?>
             <a href="<?= base_url('register') ?>" class="btn btn-outline-danger fw-bold">
@@ -54,7 +78,7 @@
                 <a href="<?= base_url('festa/' . ($festa['slug'] ?: $festa['id'])) ?>"
                    class="text-decoration-none">
                     <div class="card h-100 border-0 shadow-sm hover-card"
-                         style="border-radius:12px;overflow:hidden;transition:transform .2s,box-shadow .2s;">
+                         style="border-radius:12px;overflow:hidden;">
 
                         <!-- Faixa de data -->
                         <div class="d-flex align-items-center justify-content-between px-3 py-2"
@@ -132,6 +156,7 @@
 </div>
 
 <style>
+.hover-card { transition: transform .2s, box-shadow .2s; }
 .hover-card:hover { transform: translateY(-4px); box-shadow: 0 8px 24px rgba(0,0,0,.15) !important; }
 </style>
 

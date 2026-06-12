@@ -9,6 +9,7 @@ set -e  # Para na primeira falha
 # --- Configurações -------------------------------------------
 SITE_PATH="$(pwd)"
 PHP="php"
+COMPOSER="composer"
 BRANCH="main"
 
 # --- Cores para output ---------------------------------------
@@ -35,30 +36,36 @@ git reset --hard origin/$BRANCH
 git pull origin $BRANCH
 echo -e "${GREEN}OK: Código atualizado.${NC}"
 
-# 3. Limpa os caches do CodeIgniter
+# 3. Instala / atualiza dependências do Composer
 echo ""
-echo -e "${YELLOW}[3/6] Limpando caches...${NC}"
+echo -e "${YELLOW}[3/7] Instalando dependências (Composer)...${NC}"
+$COMPOSER install --no-dev --optimize-autoloader
+echo -e "${GREEN}OK: Dependências instaladas.${NC}"
+
+# 4. Limpa os caches do CodeIgniter
+echo ""
+echo -e "${YELLOW}[4/7] Limpando caches...${NC}"
 $PHP spark cache:clear 2>/dev/null || true
 rm -rf writable/cache/* 2>/dev/null || true
 echo -e "${GREEN}OK: Cache limpo.${NC}"
 
-# 4. Roda as migrations pendentes
+# 5. Roda as migrations pendentes
 echo ""
-echo -e "${YELLOW}[4/6] Rodando migrations...${NC}"
+echo -e "${YELLOW}[5/7] Rodando migrations...${NC}"
 $PHP spark migrate --all
 echo -e "${GREEN}OK: Migrations aplicadas.${NC}"
 
-# 5. Ajusta permissões das pastas de escrita
+# 6. Ajusta permissões das pastas de escrita
 echo ""
-echo -e "${YELLOW}[5/6] Ajustando permissões...${NC}"
+echo -e "${YELLOW}[6/7] Ajustando permissões...${NC}"
 chmod -R 775 writable/
 chmod -R 775 public/uploads/ 2>/dev/null || true
 chmod -R 775 public/assets/ 2>/dev/null || true
 echo -e "${GREEN}OK: Permissões ajustadas.${NC}"
 
-# 6. Verifica a aplicação
+# 7. Verifica a aplicação
 echo ""
-echo -e "${YELLOW}[6/6] Verificando aplicação...${NC}"
+echo -e "${YELLOW}[7/7] Verificando aplicação...${NC}"
 $PHP spark env 2>/dev/null | grep -E "Environment|baseURL" || true
 
 echo ""

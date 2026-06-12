@@ -3,8 +3,8 @@
 <?= $this->section('title') ?>Moderação de Mídia<?= $this->endSection() ?>
 
 <?= $this->section('content') ?>
-<?= $this->include('partials/admin_menu') ?>
 <div class="container py-4">
+    <?= $this->include('partials/admin_menu') ?>
     <h2 class="text-danger fw-bold mb-4">Moderação de Fotos/Vídeos</h2>
 
     <?php if (empty($pendentes)): ?>

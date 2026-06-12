@@ -231,17 +231,24 @@
                                                 <button class="accordion-button collapsed py-2 px-3 small" type="button"
                                                         data-bs-toggle="collapse" data-bs-target="#tutorial-video">
                                                     <i class="bi bi-question-circle me-2"></i>
-                                                    Como obter o link do YouTube ou Vimeo?
+                                                    Como adicionar um vídeo do YouTube ou Vimeo?
                                                 </button>
                                             </h2>
                                             <div id="tutorial-video" class="accordion-collapse collapse">
                                                 <div class="accordion-body small py-2">
-                                                    <p class="fw-semibold mb-2">YouTube:</p>
+                                                    <p class="fw-semibold mb-2">YouTube — Opção 1 (link curto):</p>
                                                     <ol class="mb-3">
                                                         <li>Abra o vídeo no YouTube</li>
-                                                        <li>Clique em <strong>Compartilhar</strong> (ícone de seta)</li>
-                                                        <li>Copie o link curto (<code>https://youtu.be/XXXXX</code>)</li>
+                                                        <li>Clique em <strong>Compartilhar</strong></li>
+                                                        <li>Copie o link (<code>https://youtu.be/XXXXX</code>)</li>
                                                         <li>Cole no campo abaixo</li>
+                                                    </ol>
+                                                    <p class="fw-semibold mb-2">YouTube — Opção 2 (código incorporado):</p>
+                                                    <ol class="mb-3">
+                                                        <li>Abra o vídeo no YouTube</li>
+                                                        <li>Clique em <strong>Compartilhar</strong> → <strong>Incorporar</strong> (<code>&lt;&gt;</code>)</li>
+                                                        <li>Clique em <strong>Copiar</strong> (copia o código <code>&lt;iframe&gt;</code> completo)</li>
+                                                        <li>Cole no campo abaixo — o sistema extrai o link automaticamente</li>
                                                     </ol>
                                                     <p class="fw-semibold mb-2">Vimeo:</p>
                                                     <ol class="mb-0">
@@ -257,9 +264,9 @@
                                     <div class="row g-3">
                                         <div class="col-12">
                                             <label class="form-label fw-semibold small">Vídeo Principal</label>
-                                            <input type="url" name="video_principal" class="form-control"
-                                                   placeholder="Ex: https://youtu.be/XXXXX ou https://vimeo.com/123456"
-                                                   value="<?= old('video_principal') ?>">
+                                            <textarea name="video_principal" class="form-control font-monospace" rows="3"
+                                                      placeholder="Cole aqui o link curto (https://youtu.be/...) OU o código <iframe> completo do YouTube/Vimeo"
+                                                      style="font-size:.82rem;"><?= old('video_principal') ?></textarea>
                                             <div class="form-text">Aparece em destaque no topo da sua página pública.</div>
                                         </div>
                                         <div class="col-12">

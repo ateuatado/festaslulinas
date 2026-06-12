@@ -233,7 +233,7 @@
                                             <button class="accordion-button collapsed py-2 px-3 small" type="button"
                                                     data-bs-toggle="collapse" data-bs-target="#tutorial-video">
                                                 <i class="bi bi-question-circle me-2"></i>
-                                                Como obter o link do YouTube ou Vimeo?
+                                                Como adicionar um vídeo do YouTube ou Vimeo?
                                             </button>
                                         </h2>
                                         <div id="tutorial-video" class="accordion-collapse collapse">
@@ -265,16 +265,16 @@
                                 <div class="row g-3">
                                     <div class="col-12">
                                         <label class="form-label fw-semibold small">Vídeo Principal</label>
-                                        <input type="url" name="video_principal" class="form-control"
-                                               placeholder="Ex: https://youtu.be/XXXXX ou https://vimeo.com/123456"
-                                               value="<?= old('video_principal', $festa['video_principal'] ?? '') ?>">
+                                        <textarea name="video_principal" class="form-control font-monospace" rows="3"
+                                                  placeholder="Cole aqui o link curto (https://youtu.be/...) OU o código <iframe> completo do YouTube/Vimeo"
+                                                  style="font-size:.82rem;"><?= old('video_principal', $festa['video_principal'] ?? '') ?></textarea>
                                         <div class="form-text">Aparece em destaque no topo da sua página pública.</div>
                                     </div>
                                     <div class="col-12">
                                         <label class="form-label fw-semibold small">Vídeo Secundário <span class="text-muted">(opcional)</span></label>
-                                        <input type="url" name="video_secundario" class="form-control"
-                                               placeholder="Ex: https://youtu.be/XXXXX ou https://vimeo.com/123456"
-                                               value="<?= old('video_secundario', $festa['video_secundario'] ?? '') ?>">
+                                        <textarea name="video_secundario" class="form-control font-monospace" rows="3"
+                                                  placeholder="Cole aqui o link curto (https://youtu.be/...) OU o código <iframe> completo do YouTube/Vimeo"
+                                                  style="font-size:.82rem;"><?= old('video_secundario', $festa['video_secundario'] ?? '') ?></textarea>
                                         <div class="form-text">Aparece após a galeria de fotos.</div>
                                     </div>
                                 </div>

@@ -145,16 +145,11 @@
                                     data-bs-placement="top"
                                     title="<?= esc($item['frase']) ?>"
                                 <?php endif; ?>>
-                                <?php
-                                    $fotoPath = FCPATH . 'uploads/apoiadores/' . $item['foto'];
-                                    $fotoUrl  = file_exists($fotoPath)
-                                        ? base_url('uploads/apoiadores/' . $item['foto'])
-                                        : 'https://ui-avatars.com/api/?name=' . urlencode($item['nome']) . '&size=110&background=1565C0&color=fff&bold=true&rounded=true';
-                                ?>
-                                <img src="<?= $fotoUrl ?>"
+                                <img src="<?= base_url('uploads/apoiadores/' . $item['foto']) ?>"
                                      class="apoiador-foto"
                                      style="width:110px; height:110px; object-fit:cover; border-radius:50%; border:4px solid #C9971C; display:block;"
-                                     alt="<?= esc($item['nome']) ?>">
+                                     alt="<?= esc($item['nome']) ?>"
+                                     onerror="this.onerror=null;this.src='https://ui-avatars.com/api/?name=<?= urlencode($item['nome']) ?>&size=110&background=1565C0&color=fff&bold=true&rounded=true'">
                             </div>
                             <h5 class="mt-2 mb-0 fw-bold" style="font-size:0.95rem;">
                                 <?= esc($item['nome']) ?>

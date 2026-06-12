@@ -6,6 +6,8 @@ use App\Models\MidiaModel;
 use App\Models\FestaModel;
 use App\Models\ApoiadorModel;
 use App\Models\ProdutoModel;
+use App\Models\FestaPostModel;
+use App\Models\FestaLinkModel;
 use CodeIgniter\Shield\Entities\User as ShieldUser;
 
 class Admin extends BaseController
@@ -126,8 +128,28 @@ class Admin extends BaseController
     {
         $this->checkAdmin();
 
-        $festas = (new FestaModel())->orderBy('created_at', 'DESC')->findAll();
-        return view('admin/festas', ['festas' => $festas]);
+        $festas      = (new FestaModel())->orderBy('created_at', 'DESC')->findAll();
+        $postsPend   = (new FestaPostModel())->where('status', 'pendente')
+                                             ->orderBy('updated_at', 'DESC')->findAll();
+        $linksPend   = (new FestaLinkModel())->where('status', 'pendente')
+                                             ->orderBy('id', 'DESC')->findAll();
+
+        // Enriquecer com nome da festa
+        $festaMap = array_column($festas, null, 'id');
+        foreach ($postsPend as &$p) {
+            $p['nome_festa'] = $festaMap[$p['festa_id']]['nome_festa'] ?? '(Festa #' . $p['festa_id'] . ')';
+            $p['slug']       = $festaMap[$p['festa_id']]['slug'] ?? null;
+        }
+        foreach ($linksPend as &$l) {
+            $l['nome_festa'] = $festaMap[$l['festa_id']]['nome_festa'] ?? '(Festa #' . $l['festa_id'] . ')';
+        }
+        unset($p, $l);
+
+        return view('admin/festas', [
+            'festas'      => $festas,
+            'postsPend'   => $postsPend,
+            'linksPend'   => $linksPend,
+        ]);
     }
 
     public function excluirFesta($id)
@@ -135,6 +157,30 @@ class Admin extends BaseController
         $this->checkAdmin();
         (new FestaModel())->delete($id);
         return redirect()->to('admin/festas')->with('message', 'Festa removida pelo Administrador.');
+    }
+
+    // ── Aprovação de Posts do Blog ───────────────────────────────────
+    public function statusPost($id, $novoStatus)
+    {
+        $this->checkAdmin();
+        if (! in_array($novoStatus, ['aprovado', 'rejeitado'], true)) {
+            return redirect()->back()->with('error', 'Status inválido.');
+        }
+        (new FestaPostModel())->update($id, ['status' => $novoStatus]);
+        return redirect()->back()
+            ->with('message', 'Post marcado como ' . $novoStatus . '.');
+    }
+
+    // ── Aprovação de Links ───────────────────────────────────────────
+    public function statusLink($id, $novoStatus)
+    {
+        $this->checkAdmin();
+        if (! in_array($novoStatus, ['aprovado', 'rejeitado'], true)) {
+            return redirect()->back()->with('error', 'Status inválido.');
+        }
+        (new FestaLinkModel())->update($id, ['status' => $novoStatus]);
+        return redirect()->back()
+            ->with('message', 'Link marcado como ' . $novoStatus . '.');
     }
 
     // ----------------------------------------------------------------

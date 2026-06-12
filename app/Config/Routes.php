@@ -90,4 +90,10 @@ $routes->group('admin', ['filter' => 'session'], function ($routes) {
     $routes->post('usuarios/criar', 'Admin::criarUsuario');
     $routes->post('usuarios/grupo/(:num)/(:segment)', 'Admin::toggleGrupo/$1/$2');
     $routes->post('usuarios/desativar/(:num)', 'Admin::desativarUsuario/$1');
+
+    // Posts do Blog das Festas
+    $routes->get('post/(:num)/(:segment)', 'Admin::statusPost/$1/$2');
+
+    // Links das Festas
+    $routes->get('link/(:num)/(:segment)', 'Admin::statusLink/$1/$2');
 });

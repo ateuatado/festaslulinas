@@ -131,14 +131,31 @@
     <section class="mb-5 d-flex justify-content-center">
         <div style="width:80%;">
             <?php if ($embedPrincipal): ?>
-                <div class="ratio ratio-16x9 rounded-3 overflow-hidden shadow">
-                    <iframe src="<?= esc($embedPrincipal) ?>"
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                            allowfullscreen class="w-100 h-100">
-                    </iframe>
+                <div class="position-relative">
+                    <div class="ratio ratio-16x9 rounded-3 overflow-hidden shadow" id="video-wrapper-1">
+                        <iframe id="video-frame-1"
+                                src="<?= esc($embedPrincipal) ?>"
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                allowfullscreen class="w-100 h-100">
+                        </iframe>
+                    </div>
+                    <!-- Fallback: aparece se o YouTube bloquear embed (Erro 153 etc.) -->
+                    <div id="video-fallback-1" class="d-none text-center py-4 px-3 rounded-3 border bg-light">
+                        <i class="bi bi-exclamation-circle text-warning fs-1 d-block mb-3"></i>
+                        <p class="fw-semibold mb-2">Este vídeo não pode ser exibido aqui diretamente.</p>
+                        <p class="text-muted small mb-3">O dono do vídeo desativou a incorporação em sites externos.</p>
+                        <a href="<?= esc($festa['video_principal']) ?>" target="_blank" rel="noopener"
+                           class="btn btn-danger fw-bold">
+                            <i class="bi bi-youtube me-2"></i> Assistir no YouTube
+                        </a>
+                    </div>
                 </div>
                 <p class="text-center text-muted small mt-2">
                     <i class="bi bi-play-circle me-1"></i> Vídeo da Festa
+                    &nbsp;·&nbsp;
+                    <a href="<?= esc($festa['video_principal']) ?>" target="_blank" rel="noopener" class="text-muted">
+                        Abrir no YouTube <i class="bi bi-box-arrow-up-right"></i>
+                    </a>
                 </p>
             <?php else: ?>
                 <!-- Sem vídeo cadastrado — exibe o clipe padrão -->
@@ -266,11 +283,20 @@
                 <i class="bi bi-camera-video text-danger fs-5"></i>
                 <h5 class="fw-bold mb-0 text-danger">Mais um Vídeo</h5>
             </div>
-            <div class="ratio ratio-16x9 rounded-3 overflow-hidden shadow">
-                <iframe src="<?= esc($embedSecundario) ?>"
+            <div class="ratio ratio-16x9 rounded-3 overflow-hidden shadow" id="video-wrapper-2">
+                <iframe id="video-frame-2"
+                        src="<?= esc($embedSecundario) ?>"
                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                         allowfullscreen class="w-100 h-100">
                 </iframe>
+            </div>
+            <div id="video-fallback-2" class="d-none text-center py-4 px-3 rounded-3 border bg-light mt-2">
+                <i class="bi bi-exclamation-circle text-warning fs-2 d-block mb-2"></i>
+                <p class="text-muted small mb-2">Incorporação bloqueada pelo YouTube.</p>
+                <a href="<?= esc($festa['video_secundario']) ?>" target="_blank" rel="noopener"
+                   class="btn btn-sm btn-danger fw-bold">
+                    <i class="bi bi-youtube me-1"></i> Assistir no YouTube
+                </a>
             </div>
         </div>
     </section>
@@ -348,6 +374,39 @@
 
 </div>
 
+
+<script>
+// Detecta se o iframe do YouTube bloqueou (Erro 153 etc.)
+// Como cross-origin não permite acesso ao conteúdo do iframe,
+// usamos postMessage do YouTube para detectar o erro.
+window.addEventListener('message', function(e) {
+    if (!e.data || typeof e.data !== 'string') return;
+    try {
+        var d = JSON.parse(e.data);
+        if (d.event === 'onError' || d.info === 150 || d.info === 101 || d.info === 2) {
+            ['1','2'].forEach(function(n) {
+                var w = document.getElementById('video-wrapper-'+n);
+                var f = document.getElementById('video-fallback-'+n);
+                if (w && f) { w.classList.add('d-none'); f.classList.remove('d-none'); }
+            });
+        }
+    } catch(err) {}
+});
+// Também detecta via load timeout: se o iframe não carregou em 5s
+['1','2'].forEach(function(n) {
+    var fr = document.getElementById('video-frame-'+n);
+    if (!fr) return;
+    var loaded = false;
+    fr.addEventListener('load', function() { loaded = true; });
+    setTimeout(function() {
+        if (!loaded) {
+            var w = document.getElementById('video-wrapper-'+n);
+            var f = document.getElementById('video-fallback-'+n);
+            if (w && f) { w.classList.add('d-none'); f.classList.remove('d-none'); }
+        }
+    }, 8000); // 8 segundos
+});
+</script>
 <style>
 #galeria-scroll:active { cursor: grabbing; }
 #galeria-scroll { scrollbar-width: thin; scrollbar-color: #b71c1c #f0f0f0; }

@@ -245,6 +245,12 @@
                                                     <li>Copie o link curto (<code>https://youtu.be/XXXXX</code>)</li>
                                                     <li>Cole no campo abaixo</li>
                                                 </ol>
+                                                    <div class="alert alert-warning py-2 px-3 small mt-2 mb-0">
+                                                        <i class="bi bi-exclamation-triangle-fill me-1"></i>
+                                                        <strong>Importante:</strong> No YouTube Studio, verifique se o vídeo tem
+                                                        <strong>"Permitir incorporação"</strong> ativado
+                                                        (Detalhes do vídeo → Mais opções → Distribuição). Sem isso, o vídeo não aparece na página da festa.
+                                                    </div>
                                                 <p class="fw-semibold mb-2">Vimeo:</p>
                                                 <ol class="mb-0">
                                                     <li>Abra o vídeo no Vimeo</li>

@@ -8,7 +8,7 @@ use CodeIgniter\Router\RouteCollection;
 
 // === Rotas públicas ===
 $routes->get('/', 'Home::index');
-$routes->get('festa/(:num)', 'Festa::ver/$1');
+$routes->get('festa/(:any)', 'Festa::ver/$1');  // aceita slug ou id numérico
 $routes->get('loja', 'Loja::index');   // Loja geral pública (sem festaId)
 
 // === Shield — login, registro, logout, etc. ===
@@ -36,6 +36,18 @@ $routes->group('dashboard', ['filter' => 'session'], function ($routes) {
 $routes->group('perfil', ['filter' => 'session'], function ($routes) {
     $routes->get('/', 'PerfilController::index');
     $routes->post('salvar', 'PerfilController::salvar');
+});
+
+// === Painel da Festa — Blog, Links, Homenageados (exige login) ===
+$routes->group('festa-panel', ['filter' => 'session'], function ($routes) {
+    $routes->get('(:num)/blog',                         'FestaPanel::blog/$1');
+    $routes->post('(:num)/blog/salvar',                 'FestaPanel::salvarBlog/$1');
+    $routes->get('(:num)/links',                        'FestaPanel::links/$1');
+    $routes->post('(:num)/links/adicionar',             'FestaPanel::adicionarLink/$1');
+    $routes->post('(:num)/links/remover/(:num)',         'FestaPanel::removerLink/$1/$2');
+    $routes->get('(:num)/homenageados',                 'FestaPanel::homenageados/$1');
+    $routes->post('(:num)/homenageados/adicionar',      'FestaPanel::adicionarHomenageado/$1');
+    $routes->post('(:num)/homenageados/remover/(:num)', 'FestaPanel::removerHomenageado/$1/$2');
 });
 
 // === Loja vinculada a uma festa (exige login) ===

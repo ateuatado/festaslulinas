@@ -48,7 +48,7 @@
                 <table class="table table-hover align-middle mb-0">
                     <thead class="table-light">
                         <tr>
-                            <th>Nome da Festa</th>
+                            <th>Nome do Coletivo</th>
                             <th>Data/Hora</th>
                             <th>Cidade/UF</th>
                             <th>Local</th>
@@ -63,17 +63,55 @@
                                 <td><?= esc($festa['cidade']) ?> - <?= esc($festa['uf']) ?></td>
                                 <td><?= esc($festa['local_evento']) ?></td>
                                 <td class="text-end">
-                                    <a href="<?= base_url('galeria/' . $festa['id']) ?>" class="btn btn-sm btn-outline-warning text-dark me-1" title="Fotos e Vídeos">
-                                        <i class="bi bi-camera-fill"></i>
-                                    </a>
-                                
-                                    <a href="<?= base_url('dashboard/editar/' . $festa['id']) ?>" class="btn btn-sm btn-outline-primary me-1">Editar</a>
-                                    <a href="<?= base_url('loja/' . $festa['id']) ?>" class="btn btn-sm btn-outline-secondary">Material</a>    
-                                    <a href="<?= base_url('dashboard/excluir/' . $festa['id']) ?>" 
-                                    class="btn btn-sm btn-outline-danger" 
-                                    onclick="return confirm('Tem certeza que deseja cancelar esta festa?');">
-                                    <i class="bi bi-trash"></i>
-                                    </a>                      
+                                    <div class="dropdown">
+                                        <button class="btn btn-sm btn-outline-danger dropdown-toggle" type="button"
+                                                data-bs-toggle="dropdown" aria-expanded="false">
+                                            <i class="bi bi-grid-fill"></i> Gerenciar
+                                        </button>
+                                        <ul class="dropdown-menu dropdown-menu-end shadow">
+                                            <li>
+                                                <a class="dropdown-item" href="<?= base_url('festa-panel/' . $festa['id'] . '/blog') ?>">
+                                                    <i class="bi bi-pencil-square me-2 text-danger"></i>Blog da Festa
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a class="dropdown-item" href="<?= base_url('festa-panel/' . $festa['id'] . '/links') ?>">
+                                                    <i class="bi bi-link-45deg me-2 text-primary"></i>Links
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a class="dropdown-item" href="<?= base_url('festa-panel/' . $festa['id'] . '/homenageados') ?>">
+                                                    <i class="bi bi-stars me-2 text-warning"></i>Homenageados
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a class="dropdown-item" href="<?= base_url('galeria/' . $festa['id']) ?>">
+                                                    <i class="bi bi-camera-fill me-2"></i>Fotos
+                                                </a>
+                                            </li>
+                                            <li><hr class="dropdown-divider"></li>
+                                            <li>
+                                                <a class="dropdown-item" href="<?= base_url('dashboard/editar/' . $festa['id']) ?>">
+                                                    <i class="bi bi-gear me-2"></i>Editar Dados
+                                                </a>
+                                            </li>
+                                            <?php if (!empty($festa['slug'])): ?>
+                                            <li>
+                                                <a class="dropdown-item" href="<?= base_url('festa/' . $festa['slug']) ?>" target="_blank">
+                                                    <i class="bi bi-box-arrow-up-right me-2 text-success"></i>Ver Página Pública
+                                                </a>
+                                            </li>
+                                            <?php endif; ?>
+                                            <li><hr class="dropdown-divider"></li>
+                                            <li>
+                                                <a class="dropdown-item text-danger"
+                                                   href="<?= base_url('dashboard/excluir/' . $festa['id']) ?>"
+                                                   onclick="return confirm('Tem certeza que deseja cancelar esta festa?')">
+                                                    <i class="bi bi-trash me-2"></i>Cancelar Festa
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
                                 </td>
                             </tr>
                         <?php endforeach; ?>

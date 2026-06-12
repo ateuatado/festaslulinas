@@ -5,6 +5,8 @@ namespace App\Controllers;
 use App\Controllers\BaseController;
 use App\Models\FestaModel;
 
+helper('slug');
+
 class Dashboard extends BaseController
 {
     public function index()
@@ -67,9 +69,11 @@ class Dashboard extends BaseController
 
         // 4. Salva
         $festaModel = new FestaModel();
+        $nomeFesta  = $this->request->getPost('nome_festa');
         $dados = [
             'user_id'          => auth()->id(),
-            'nome_festa'       => $this->request->getPost('nome_festa'),
+            'slug'             => unique_festa_slug($nomeFesta),
+            'nome_festa'       => $nomeFesta,
             'data_hora'        => $dataHora,
             'organizacao'      => $this->request->getPost('organizacao'),
             'cep'              => preg_replace('/\D/', '', $this->request->getPost('cep')),
@@ -155,8 +159,10 @@ class Dashboard extends BaseController
         }
 
         // Dados para atualizar
+        $nomeFesta = $this->request->getPost('nome_festa');
         $dados = [
-            'nome_festa'       => $this->request->getPost('nome_festa'),
+            'slug'             => unique_festa_slug($nomeFesta, (int) $id),
+            'nome_festa'       => $nomeFesta,
             'data_hora'        => $dataHora,
             'organizacao'      => $this->request->getPost('organizacao'),
             'cep'              => preg_replace('/\D/', '', $this->request->getPost('cep') ?? ''),

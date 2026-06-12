@@ -2,70 +2,111 @@
 
 if (! function_exists('video_embed_url')) {
     /**
-     * Converte qualquer formato de vídeo em URL de embed limpa.
-     * Aceita: URL curta, URL longa, URL de embed direta, ou código <iframe> completo.
+     * Converte qualquer formato em URL de embed limpa.
+     * Usa youtube-nocookie.com para evitar o Erro 153 (referrer policy).
+     * Remove o parâmetro ?si= (session tracker do YouTube que pode causar bloqueios).
      *
-     * Exemplos aceitos:
-     *   https://youtu.be/eL0nBX0jVBI?si=_w5nKcU_1ZB93YKX
-     *   https://www.youtube.com/watch?v=dQw4w9WgXcQ
-     *   https://youtube.com/shorts/dQw4w9WgXcQ
-     *   https://vimeo.com/123456789
-     *   https://player.vimeo.com/video/123456789
-     *   https://www.youtube.com/embed/dQw4w9WgXcQ?si=...
-     *   <iframe ... src="https://www.youtube.com/embed/..." ...></iframe>
+     * Aceita:
+     *   - Link curto:   https://youtu.be/ID?si=...
+     *   - Link longo:   https://www.youtube.com/watch?v=ID
+     *   - Shorts:       https://youtube.com/shorts/ID
+     *   - Embed direta: https://www.youtube.com/embed/ID
+     *   - Código iframe completo: <iframe ... src="..." ...></iframe>
+     *   - Vimeo:        https://vimeo.com/ID
      */
     function video_embed_url(?string $url): ?string
     {
-        if (empty($url)) {
-            return null;
-        }
+        if (empty($url)) return null;
 
         $url = trim($url);
 
-        // ── 1. Código <iframe> completo — extrai apenas o src ───────────────
-        if (str_starts_with($url, '<iframe') || str_contains($url, '<iframe ')) {
+        // ── 1. Código <iframe> completo — extrai o src ─────────────────────
+        if (str_contains($url, '<iframe')) {
             if (preg_match('/src=["\']([^"\']+)["\']/', $url, $m)) {
-                // Recursivo com a URL extraída do src
                 return video_embed_url(html_entity_decode($m[1]));
             }
             return null;
         }
 
-        // ── 2. Já é embed do YouTube — retorna limpa (mantém si= e outros params) ──
-        if (str_contains($url, 'youtube.com/embed/')) {
-            // Garante que começa com https
-            if (str_starts_with($url, '//')) {
-                $url = 'https:' . $url;
-            }
-            return $url;
+        // ── 2. Já é embed do YouTube — normaliza para nocookie ─────────────
+        if (preg_match('/(?:youtube(?:-nocookie)?\.com)\/embed\/([a-zA-Z0-9_-]{11})/', $url, $m)) {
+            return 'https://www.youtube-nocookie.com/embed/' . $m[1];
         }
 
-        // ── 3. Já é embed do Vimeo ───────────────────────────────────────────
+        // ── 3. Já é embed do Vimeo ─────────────────────────────────────────
         if (str_contains($url, 'player.vimeo.com/video/')) {
             return $url;
         }
 
-        // ── 4. YouTube watch: youtube.com/watch?v=ID ─────────────────────────
+        // ── 4. YouTube watch: youtube.com/watch?v=ID ──────────────────────
         if (preg_match('/youtube\.com\/watch\?.*[?&]v=([a-zA-Z0-9_-]{11})/', $url, $m)) {
-            return 'https://www.youtube.com/embed/' . $m[1];
+            return 'https://www.youtube-nocookie.com/embed/' . $m[1];
         }
 
-        // ── 5. YouTube link curto: youtu.be/ID?si=... ────────────────────────
+        // ── 5. YouTube link curto: youtu.be/ID ────────────────────────────
         if (preg_match('/youtu\.be\/([a-zA-Z0-9_-]{11})/', $url, $m)) {
-            return 'https://www.youtube.com/embed/' . $m[1];
+            return 'https://www.youtube-nocookie.com/embed/' . $m[1];
         }
 
-        // ── 6. YouTube Shorts: youtube.com/shorts/ID ─────────────────────────
+        // ── 6. YouTube Shorts: youtube.com/shorts/ID ──────────────────────
         if (preg_match('/youtube\.com\/shorts\/([a-zA-Z0-9_-]{11})/', $url, $m)) {
-            return 'https://www.youtube.com/embed/' . $m[1];
+            return 'https://www.youtube-nocookie.com/embed/' . $m[1];
         }
 
-        // ── 7. Vimeo: vimeo.com/ID ────────────────────────────────────────────
+        // ── 7. Vimeo: vimeo.com/ID ─────────────────────────────────────────
         if (preg_match('/vimeo\.com\/(\d+)/', $url, $m)) {
             return 'https://player.vimeo.com/video/' . $m[1];
         }
 
-        // URL não reconhecida
+        return null;
+    }
+}
+
+if (! function_exists('video_watch_url')) {
+    /**
+     * Retorna a URL de assistir (youtu.be ou youtube.com/watch) a partir
+     * de qualquer formato: link curto, link longo, embed ou código iframe.
+     * Útil para o link "Abrir no YouTube".
+     */
+    function video_watch_url(?string $url): ?string
+    {
+        if (empty($url)) return null;
+
+        $url = trim($url);
+
+        // Extrai src de iframe
+        if (str_contains($url, '<iframe')) {
+            if (preg_match('/src=["\']([^"\']+)["\']/', $url, $m)) {
+                return video_watch_url(html_entity_decode($m[1]));
+            }
+            return null;
+        }
+
+        // Já é link curto
+        if (preg_match('/youtu\.be\/([a-zA-Z0-9_-]{11})/', $url, $m)) {
+            return 'https://youtu.be/' . $m[1];
+        }
+
+        // Link longo com v=
+        if (preg_match('/youtube\.com\/watch\?.*[?&]v=([a-zA-Z0-9_-]{11})/', $url, $m)) {
+            return 'https://youtu.be/' . $m[1];
+        }
+
+        // URL de embed (youtube.com/embed/ ou youtube-nocookie.com/embed/)
+        if (preg_match('/(?:youtube(?:-nocookie)?\.com)\/embed\/([a-zA-Z0-9_-]{11})/', $url, $m)) {
+            return 'https://youtu.be/' . $m[1];
+        }
+
+        // Shorts
+        if (preg_match('/youtube\.com\/shorts\/([a-zA-Z0-9_-]{11})/', $url, $m)) {
+            return 'https://youtu.be/' . $m[1];
+        }
+
+        // Vimeo — retorna como está
+        if (preg_match('/vimeo\.com\/(\d+)/', $url, $m)) {
+            return 'https://vimeo.com/' . $m[1];
+        }
+
         return null;
     }
 }

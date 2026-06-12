@@ -48,6 +48,8 @@
 <meta name="twitter:image"       content="<?= esc($ogImage) ?>">
 <!-- Canonical URL (SEO) -->
 <link rel="canonical" href="<?= esc($ogUrl) ?>">
+<!-- Referrer policy — necessário para embeds YouTube (evita Erro 153) -->
+<meta name="referrer" content="strict-origin-when-cross-origin">
 <!-- Schema.org Event (Google rich results) -->
 <script type="application/ld+json">
 {
@@ -135,7 +137,8 @@
                     <div class="ratio ratio-16x9 rounded-3 overflow-hidden shadow" id="video-wrapper-1">
                         <iframe id="video-frame-1"
                                 src="<?= esc($embedPrincipal) ?>"
-                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                referrerpolicy="strict-origin-when-cross-origin"
                                 allowfullscreen class="w-100 h-100">
                         </iframe>
                     </div>
@@ -144,7 +147,8 @@
                         <i class="bi bi-exclamation-circle text-warning fs-1 d-block mb-3"></i>
                         <p class="fw-semibold mb-2">Este vídeo não pode ser exibido aqui diretamente.</p>
                         <p class="text-muted small mb-3">O dono do vídeo desativou a incorporação em sites externos.</p>
-                        <a href="<?= esc($festa['video_principal']) ?>" target="_blank" rel="noopener"
+                        <?php $watchUrl1fb = video_watch_url($festa['video_principal'] ?? null); ?>
+                        <a href="<?= esc($watchUrl1fb ?: 'https://youtube.com') ?>" target="_blank" rel="noopener"
                            class="btn btn-danger fw-bold">
                             <i class="bi bi-youtube me-2"></i> Assistir no YouTube
                         </a>
@@ -153,9 +157,12 @@
                 <p class="text-center text-muted small mt-2">
                     <i class="bi bi-play-circle me-1"></i> Vídeo da Festa
                     &nbsp;·&nbsp;
-                    <a href="<?= esc($festa['video_principal']) ?>" target="_blank" rel="noopener" class="text-muted">
+                    <?php $watchUrl1 = video_watch_url($festa['video_principal'] ?? null); ?>
+                    <?php if ($watchUrl1): ?>
+                    <a href="<?= esc($watchUrl1) ?>" target="_blank" rel="noopener" class="text-muted">
                         Abrir no YouTube <i class="bi bi-box-arrow-up-right"></i>
                     </a>
+                    <?php endif; ?>
                 </p>
             <?php else: ?>
                 <!-- Sem vídeo cadastrado — exibe o clipe padrão -->
@@ -286,14 +293,16 @@
             <div class="ratio ratio-16x9 rounded-3 overflow-hidden shadow" id="video-wrapper-2">
                 <iframe id="video-frame-2"
                         src="<?= esc($embedSecundario) ?>"
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                        referrerpolicy="strict-origin-when-cross-origin"
                         allowfullscreen class="w-100 h-100">
                 </iframe>
             </div>
             <div id="video-fallback-2" class="d-none text-center py-4 px-3 rounded-3 border bg-light mt-2">
                 <i class="bi bi-exclamation-circle text-warning fs-2 d-block mb-2"></i>
                 <p class="text-muted small mb-2">Incorporação bloqueada pelo YouTube.</p>
-                <a href="<?= esc($festa['video_secundario']) ?>" target="_blank" rel="noopener"
+                <?php $watchUrl2fb = video_watch_url($festa['video_secundario'] ?? null); ?>
+                <a href="<?= esc($watchUrl2fb ?: 'https://youtube.com') ?>" target="_blank" rel="noopener"
                    class="btn btn-sm btn-danger fw-bold">
                     <i class="bi bi-youtube me-1"></i> Assistir no YouTube
                 </a>

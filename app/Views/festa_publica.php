@@ -121,65 +121,85 @@
 <div class="container pb-5 mt-4">
 
     <!-- ══════════════════════════════════════════════════ -->
-    <!-- FESTEIRO — Perfil do organizador                  -->
+    <!-- FESTEIRO (col-4) + BLOG (col-8) na mesma linha    -->
     <!-- ══════════════════════════════════════════════════ -->
-    <?php if (!empty($perfil)): ?>
+    <?php if (!empty($perfil) || !empty($post)): ?>
     <section class="mb-5">
-        <div class="card border-0 shadow-sm">
-            <div class="card-body p-4">
-                <h5 class="fw-bold text-danger border-bottom pb-2 mb-3">
-                    <i class="bi bi-person-circle me-2"></i>Sobre o Festeiro
-                </h5>
-                <div class="d-flex gap-4 align-items-start flex-wrap">
-                    <!-- Foto -->
-                    <?php if (!empty($perfil['foto'])): ?>
-                    <div class="flex-shrink-0">
+        <div class="row g-4 align-items-stretch">
+
+            <!-- COL 4 — Perfil do Festeiro -->
+            <?php if (!empty($perfil)): ?>
+            <div class="col-md-4">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-body p-4 text-center d-flex flex-column align-items-center justify-content-center">
+
+                        <?php if (!empty($perfil['foto'])): ?>
                         <img src="<?= base_url('uploads/perfil/' . $perfil['foto']) ?>"
                              alt="<?= esc($perfil['nome_completo']) ?>"
-                             class="rounded-circle"
-                             style="width:110px;height:110px;object-fit:cover;border:4px solid #C9971C;">
-                    </div>
-                    <?php endif; ?>
+                             class="rounded-circle mb-3"
+                             style="width:120px;height:120px;object-fit:cover;border:4px solid #C9971C;">
+                        <?php else: ?>
+                        <div class="rounded-circle mb-3 mx-auto d-flex align-items-center justify-content-center bg-light"
+                             style="width:120px;height:120px;border:4px solid #C9971C;">
+                            <i class="bi bi-person-fill text-secondary" style="font-size:3rem;"></i>
+                        </div>
+                        <?php endif; ?>
 
-                    <!-- Dados -->
-                    <div class="flex-grow-1">
-                        <h4 class="fw-bold mb-1"><?= esc($perfil['nome_completo']) ?></h4>
+                        <h5 class="fw-bold mb-2"><?= esc($perfil['nome_completo']) ?></h5>
+
                         <?php if (!empty($perfil['profissao'])): ?>
-                            <p class="text-muted mb-1"><i class="bi bi-briefcase me-1"></i><?= esc($perfil['profissao']) ?></p>
+                            <p class="text-muted small mb-1">
+                                <i class="bi bi-briefcase me-1"></i><?= esc($perfil['profissao']) ?>
+                            </p>
                         <?php endif; ?>
                         <?php if (!empty($perfil['filiacao'])): ?>
-                            <p class="mb-1"><i class="bi bi-flag me-1 text-danger"></i><?= esc($perfil['filiacao']) ?></p>
+                            <p class="small mb-1">
+                                <i class="bi bi-flag me-1 text-danger"></i><?= esc($perfil['filiacao']) ?>
+                            </p>
                         <?php endif; ?>
                         <?php if (!empty($perfil['representa_entidade'])): ?>
-                            <p class="mb-1 small"><i class="bi bi-building me-1"></i><?= esc($perfil['representa_entidade']) ?></p>
+                            <p class="small mb-1 text-muted">
+                                <i class="bi bi-building me-1"></i><?= esc($perfil['representa_entidade']) ?>
+                            </p>
                         <?php endif; ?>
                         <?php if (!empty($perfil['historico_cargos'])): ?>
-                            <details class="mt-2">
-                                <summary class="fw-semibold text-primary" style="cursor:pointer;">
+                            <details class="mt-2 text-start w-100">
+                                <summary class="fw-semibold text-primary small" style="cursor:pointer;">
                                     <i class="bi bi-journal-text me-1"></i>Trajetória
                                 </summary>
-                                <div class="mt-2 text-muted small" style="white-space:pre-line;border-left:3px solid #C9971C;padding-left:12px;">
+                                <div class="mt-2 text-muted small"
+                                     style="white-space:pre-line;border-left:3px solid #C9971C;padding-left:10px;">
                                     <?= esc($perfil['historico_cargos']) ?>
                                 </div>
                             </details>
                         <?php endif; ?>
+
+                        <div class="mt-3 pt-2 border-top w-100">
+                            <small class="text-muted fw-semibold text-uppercase" style="letter-spacing:.05em;">
+                                <i class="bi bi-person-heart me-1 text-danger"></i>Festeiro Lulino
+                            </small>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </section>
-    <?php endif; ?>
+            <?php endif; ?>
 
-    <!-- ══════════════════════════════════════════════════ -->
-    <!-- BLOG — Texto aprovado                             -->
-    <!-- ══════════════════════════════════════════════════ -->
-    <?php if (!empty($post)): ?>
-    <section class="mb-5">
-        <h5 class="fw-bold text-danger border-bottom pb-2 mb-3">
-            <i class="bi bi-newspaper me-2"></i>Sobre a Festa
-        </h5>
-        <div class="blog-content lh-lg" style="font-size:1.05rem;">
-            <?= $post['conteudo'] /* HTML sanitizado do Quill */ ?>
+            <!-- COL 8 — Blog / Sobre a Festa -->
+            <?php if (!empty($post)): ?>
+            <div class="col-md-<?= !empty($perfil) ? '8' : '12' ?>">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-body p-4">
+                        <h5 class="fw-bold text-danger border-bottom pb-2 mb-3">
+                            <i class="bi bi-newspaper me-2"></i>Sobre a Festa
+                        </h5>
+                        <div class="blog-content lh-lg" style="font-size:1.05rem;">
+                            <?= $post['conteudo'] ?>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <?php endif; ?>
+
         </div>
     </section>
     <?php endif; ?>
@@ -222,37 +242,7 @@
     </section>
 
     <!-- ══════════════════════════════════════════════════ -->
-    <!-- LINKS INTERESSANTES                               -->
-    <!-- ══════════════════════════════════════════════════ -->
-    <?php if (!empty($links)): ?>
-    <section class="mb-5">
-        <h5 class="fw-bold text-danger border-bottom pb-2 mb-3">
-            <i class="bi bi-link-45deg me-2"></i>Links Interessantes
-        </h5>
-        <div class="row row-cols-1 row-cols-md-2 g-2">
-            <?php foreach ($links as $link): ?>
-            <div class="col">
-                <a href="<?= esc($link['url']) ?>" target="_blank" rel="noopener"
-                   class="d-flex align-items-center gap-3 text-decoration-none p-3 border rounded bg-light hover-card">
-                    <div class="rounded-circle d-flex align-items-center justify-content-center flex-shrink-0"
-                         style="width:40px;height:40px;background:#1565C0;color:#fff;">
-                        <i class="bi bi-link-45deg fs-5"></i>
-                    </div>
-                    <div>
-                        <div class="fw-semibold text-dark"><?= esc($link['titulo']) ?></div>
-                        <small class="text-muted text-truncate d-block" style="max-width:300px;">
-                            <?= esc(parse_url($link['url'], PHP_URL_HOST)) ?>
-                        </small>
-                    </div>
-                </a>
-            </div>
-            <?php endforeach; ?>
-        </div>
-    </section>
-    <?php endif; ?>
-
-    <!-- ══════════════════════════════════════════════════ -->
-    <!-- HOMENAGEADOS                                      -->
+    <!-- HOMENAGEADOS (antes de links)                     -->
     <!-- ══════════════════════════════════════════════════ -->
     <?php if (!empty($homenageados)): ?>
     <section class="mb-5">
@@ -280,6 +270,36 @@
                 <?php if (!empty($hom['frase'])): ?>
                     <p class="text-muted small mt-1 fst-italic">"<?= esc($hom['frase']) ?>"</p>
                 <?php endif; ?>
+            </div>
+            <?php endforeach; ?>
+        </div>
+    </section>
+    <?php endif; ?>
+
+    <!-- ══════════════════════════════════════════════════ -->
+    <!-- LINKS INTERESSANTES (por último)                  -->
+    <!-- ══════════════════════════════════════════════════ -->
+    <?php if (!empty($links)): ?>
+    <section class="mb-5">
+        <h5 class="fw-bold text-danger border-bottom pb-2 mb-3">
+            <i class="bi bi-link-45deg me-2"></i>Links Interessantes
+        </h5>
+        <div class="row row-cols-1 row-cols-md-2 g-2">
+            <?php foreach ($links as $link): ?>
+            <div class="col">
+                <a href="<?= esc($link['url']) ?>" target="_blank" rel="noopener"
+                   class="d-flex align-items-center gap-3 text-decoration-none p-3 border rounded bg-light hover-card">
+                    <div class="rounded-circle d-flex align-items-center justify-content-center flex-shrink-0"
+                         style="width:40px;height:40px;background:#1565C0;color:#fff;">
+                        <i class="bi bi-link-45deg fs-5"></i>
+                    </div>
+                    <div>
+                        <div class="fw-semibold text-dark"><?= esc($link['titulo']) ?></div>
+                        <small class="text-muted text-truncate d-block" style="max-width:300px;">
+                            <?= esc(parse_url($link['url'], PHP_URL_HOST)) ?>
+                        </small>
+                    </div>
+                </a>
             </div>
             <?php endforeach; ?>
         </div>

@@ -1,5 +1,4 @@
 <?= $this->extend('layouts/main') ?>
-
 <?= $this->section('title') ?>Cadastrar Festa<?= $this->endSection() ?>
 
 <?= $this->section('content') ?>
@@ -11,66 +10,215 @@
                     <h5 class="mb-0">Cadastrar Nova Festa</h5>
                 </div>
                 <div class="card-body p-4">
-                    
-                    <form action="<?= base_url('dashboard/salvar') ?>" method="post">
+
+                    <?php
+                        $isAdmin   = auth()->user()->inGroup('admin');
+                        $dataMin   = '2026-07-13';
+                        $dataMax   = '2026-08-13';
+                    ?>
+
+                    <form action="<?= base_url('dashboard/salvar') ?>" method="post" id="formNovaFesta">
                         <?= csrf_field() ?>
 
                         <div class="row g-3">
+
+                            <!-- Nome do Coletivo -->
                             <div class="col-12">
-                                <label class="form-label">Nome da Festa</label>
-                                <input type="text" name="nome_festa" class="form-control" placeholder="Ex: Arraiá da Democracia" required>
+                                <label class="form-label fw-semibold">Nome do Coletivo</label>
+                                <input type="text"
+                                       name="nome_festa"
+                                       id="nome_festa"
+                                       class="form-control"
+                                       placeholder="Coletivo pela democracia PE"
+                                       value="<?= old('nome_festa') ?>"
+                                       required>
                             </div>
 
+                            <!-- Data -->
                             <div class="col-md-6">
-                                <label class="form-label">Data e Hora</label>
-                                <input type="datetime-local" name="data_hora" class="form-control" required>
+                                <label class="form-label fw-semibold">Data da Festa</label>
+                                <input type="date"
+                                       name="data_evento"
+                                       id="data_evento"
+                                       class="form-control"
+                                       value="<?= old('data_evento') ?>"
+                                       <?php if (!$isAdmin): ?>
+                                           min="<?= $dataMin ?>"
+                                           max="<?= $dataMax ?>"
+                                       <?php endif; ?>
+                                       required>
+                                <?php if (!$isAdmin): ?>
+                                    <div class="form-text text-muted">
+                                        <i class="bi bi-calendar-check text-danger"></i>
+                                        Período oficial: 13 de julho a 13 de agosto de 2026.
+                                        Festas fora desta data devem ser encaminhadas ao administrador.
+                                    </div>
+                                <?php endif; ?>
                             </div>
 
+                            <!-- Hora -->
                             <div class="col-md-6">
-                                <label class="form-label">Organização / Grupo</label>
-                                <input type="text" name="organizacao" class="form-control" placeholder="Ex: Diretório Municipal, Associação..." required>
+                                <label class="form-label fw-semibold">Horário</label>
+                                <input type="time"
+                                       name="hora_evento"
+                                       id="hora_evento"
+                                       class="form-control"
+                                       value="<?= old('hora_evento') ?>"
+                                       required>
                             </div>
 
-                            <div class="col-md-8">
-                                <label class="form-label">Cidade</label>
-                                <input type="text" name="cidade" class="form-control" required>
+                            <!-- Festa do Coletivo -->
+                            <div class="col-12">
+                                <label class="form-label fw-semibold">Festa do Coletivo</label>
+                                <input type="text"
+                                       name="organizacao"
+                                       id="organizacao"
+                                       class="form-control"
+                                       placeholder="Nome do grupo ou coletivo"
+                                       value="<?= old('organizacao') ?>"
+                                       required>
+                                <?php if (!$isAdmin): ?>
+                                    <div class="form-text text-warning-emphasis">
+                                        <i class="bi bi-info-circle"></i>
+                                        Festas fora do período oficial (13/07 a 13/08) devem ser
+                                        encaminhadas ao <strong>administrador</strong> para aprovação.
+                                    </div>
+                                <?php endif; ?>
+                            </div>
+
+                            <!-- CEP + Endereço via ViaCEP -->
+                            <div class="col-12">
+                                <hr class="my-1">
+                                <p class="fw-semibold mb-2 text-danger">
+                                    <i class="bi bi-geo-alt-fill"></i> Endereço do Evento
+                                </p>
                             </div>
 
                             <div class="col-md-4">
-                                <label class="form-label">UF</label>
-                                <select name="uf" class="form-select" required>
-                                    <option value="" selected disabled>Selecione...</option>
-                                    <option value="AC">AC</option><option value="AL">AL</option><option value="AP">AP</option>
-                                    <option value="AM">AM</option><option value="BA">BA</option><option value="CE">CE</option>
-                                    <option value="DF">DF</option><option value="ES">ES</option><option value="GO">GO</option>
-                                    <option value="MA">MA</option><option value="MT">MT</option><option value="MS">MS</option>
-                                    <option value="MG">MG</option><option value="PA">PA</option><option value="PB">PB</option>
-                                    <option value="PR">PR</option><option value="PE">PE</option><option value="PI">PI</option>
-                                    <option value="RJ">RJ</option><option value="RN">RN</option><option value="RS">RS</option>
-                                    <option value="RO">RO</option><option value="RR">RR</option><option value="SC">SC</option>
-                                    <option value="SP">SP</option><option value="SE">SE</option><option value="TO">TO</option>
-                                </select>
+                                <label class="form-label fw-semibold">CEP</label>
+                                <div class="input-group">
+                                    <input type="text"
+                                           name="cep"
+                                           id="cep"
+                                           class="form-control"
+                                           placeholder="00000-000"
+                                           maxlength="9"
+                                           value="<?= old('cep') ?>"
+                                           required>
+                                    <span class="input-group-text" id="cep-spinner" style="display:none;">
+                                        <span class="spinner-border spinner-border-sm text-danger"></span>
+                                    </span>
+                                </div>
+                                <div id="cep-erro" class="form-text text-danger" style="display:none;">
+                                    CEP não encontrado. Verifique e tente novamente.
+                                </div>
                             </div>
 
-                            <div class="col-12">
-                                <label class="form-label">Local do Evento</label>
-                                <input type="text" name="local_evento" class="form-control" placeholder="Nome da praça, clube ou endereço completo" required>
+                            <div class="col-md-8">
+                                <label class="form-label fw-semibold">Logradouro</label>
+                                <input type="text"
+                                       name="logradouro"
+                                       id="logradouro"
+                                       class="form-control bg-light"
+                                       placeholder="Preenchido automaticamente"
+                                       value="<?= old('logradouro') ?>"
+                                       readonly>
                             </div>
 
-                            <div class="col-12">
-                                <label class="form-label">Condições de Acesso</label>
-                                <input type="text" name="condicoes_acesso" class="form-control" placeholder="Ex: Gratuito, 1kg de alimento, Entrada Franca" required>
+                            <div class="col-md-5">
+                                <label class="form-label fw-semibold">Bairro</label>
+                                <input type="text"
+                                       name="bairro"
+                                       id="bairro"
+                                       class="form-control bg-light"
+                                       placeholder="Preenchido automaticamente"
+                                       value="<?= old('bairro') ?>"
+                                       readonly>
                             </div>
 
-                            <div class="col-12">
-                                <label class="form-label">Informações Adicionais (Opcional)</label>
-                                <textarea name="descricao" class="form-control" rows="3"></textarea>
+                            <div class="col-md-5">
+                                <label class="form-label fw-semibold">Cidade</label>
+                                <input type="text"
+                                       name="cidade"
+                                       id="cidade"
+                                       class="form-control bg-light"
+                                       placeholder="Preenchida automaticamente"
+                                       value="<?= old('cidade') ?>"
+                                       readonly>
                             </div>
-                        </div>
+
+                            <div class="col-md-2">
+                                <label class="form-label fw-semibold">UF</label>
+                                <input type="text"
+                                       name="uf"
+                                       id="uf"
+                                       class="form-control bg-light text-center fw-bold"
+                                       placeholder="UF"
+                                       maxlength="2"
+                                       value="<?= old('uf') ?>"
+                                       readonly>
+                            </div>
+
+                            <div class="col-md-3">
+                                <label class="form-label fw-semibold">Número</label>
+                                <input type="text"
+                                       name="numero"
+                                       id="numero"
+                                       class="form-control"
+                                       placeholder="Ex: 123"
+                                       value="<?= old('numero') ?>">
+                            </div>
+
+                            <div class="col-md-9">
+                                <label class="form-label fw-semibold">Complemento <span class="text-muted small">(Opcional)</span></label>
+                                <input type="text"
+                                       name="complemento"
+                                       id="complemento"
+                                       class="form-control"
+                                       placeholder="Ex: Apto 12, Bloco B, Sala 3"
+                                       value="<?= old('complemento') ?>">
+                            </div>
+
+                            <!-- Local do Evento -->
+                            <div class="col-12">
+                                <label class="form-label fw-semibold">Local do Evento</label>
+                                <input type="text"
+                                       name="local_evento"
+                                       id="local_evento"
+                                       class="form-control"
+                                       placeholder="Nome da praça, clube, associação ou espaço cultural"
+                                       value="<?= old('local_evento') ?>"
+                                       required>
+                            </div>
+
+                            <!-- Condições de Acesso -->
+                            <div class="col-12">
+                                <label class="form-label fw-semibold">Condições de Acesso</label>
+                                <input type="text"
+                                       name="condicoes_acesso"
+                                       id="condicoes_acesso"
+                                       class="form-control"
+                                       placeholder="Ex: Gratuito, 1kg de alimento, Entrada Franca"
+                                       value="<?= old('condicoes_acesso') ?>"
+                                       required>
+                            </div>
+
+                            <!-- Informações Adicionais -->
+                            <div class="col-12">
+                                <label class="form-label fw-semibold">Informações Adicionais <span class="text-muted small">(Opcional)</span></label>
+                                <textarea name="descricao" id="descricao" class="form-control" rows="3"><?= old('descricao') ?></textarea>
+                            </div>
+
+                        </div><!-- /row -->
+
+                        <!-- Campo oculto que junta data + hora antes de enviar -->
+                        <input type="hidden" name="data_hora" id="data_hora">
 
                         <div class="d-flex justify-content-between mt-4">
                             <a href="<?= base_url('dashboard') ?>" class="btn btn-outline-secondary">Cancelar</a>
-                            <button type="submit" class="btn btn-danger px-4">Salvar Festa</button>
+                            <button type="submit" class="btn btn-danger px-4 fw-bold">
+                                <i class="bi bi-check-circle me-1"></i> Salvar Festa
+                            </button>
                         </div>
 
                     </form>
@@ -79,4 +227,66 @@
         </div>
     </div>
 </div>
+<?= $this->endSection() ?>
+
+<?= $this->section('scripts') ?>
+<script>
+// ── Combina data + hora no campo oculto data_hora antes de enviar ──
+document.getElementById('formNovaFesta').addEventListener('submit', function (e) {
+    const data = document.getElementById('data_evento').value;
+    const hora = document.getElementById('hora_evento').value;
+    if (data && hora) {
+        document.getElementById('data_hora').value = data + ' ' + hora + ':00';
+    }
+});
+
+// ── Máscara simples para o CEP ──
+document.getElementById('cep').addEventListener('input', function () {
+    let v = this.value.replace(/\D/g, '');
+    if (v.length > 5) v = v.slice(0, 5) + '-' + v.slice(5, 8);
+    this.value = v;
+
+    // Dispara busca quando CEP tiver 8 dígitos
+    if (v.replace(/\D/g, '').length === 8) {
+        buscarCep(v.replace(/\D/g, ''));
+    }
+});
+
+// ── Busca endereço na API ViaCEP ──
+async function buscarCep(cep) {
+    const spinner = document.getElementById('cep-spinner');
+    const erro    = document.getElementById('cep-erro');
+
+    spinner.style.display = 'inline-flex';
+    erro.style.display    = 'none';
+
+    try {
+        const res  = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
+        const data = await res.json();
+
+        if (data.erro) {
+            erro.style.display = 'block';
+            limparEndereco();
+        } else {
+            document.getElementById('logradouro').value = data.logradouro  || '';
+            document.getElementById('bairro').value     = data.bairro      || '';
+            document.getElementById('cidade').value     = data.localidade  || '';
+            document.getElementById('uf').value         = data.uf          || '';
+            // Foca no campo número para o usuário completar
+            document.getElementById('numero').focus();
+        }
+    } catch (err) {
+        erro.style.display = 'block';
+        limparEndereco();
+    } finally {
+        spinner.style.display = 'none';
+    }
+}
+
+function limparEndereco() {
+    ['logradouro', 'bairro', 'cidade', 'uf'].forEach(id => {
+        document.getElementById(id).value = '';
+    });
+}
+</script>
 <?= $this->endSection() ?>

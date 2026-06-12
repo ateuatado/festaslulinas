@@ -32,43 +32,63 @@ class Dashboard extends BaseController
 
     public function salvar()
     {
-        // 1. Validar os dados recebidos do formulário
+        $isAdmin = auth()->user()->inGroup('admin');
+
+        // 1. Monta data_hora a partir dos dois campos separados
+        $dataEvento = $this->request->getPost('data_evento');
+        $horaEvento = $this->request->getPost('hora_evento');
+        $dataHora   = $dataEvento . ' ' . $horaEvento . ':00';
+
+        // 2. Validação
         $regras = [
             'nome_festa'       => 'required|min_length[3]',
-            'data_hora'        => 'required',
-            'cidade'           => 'required',
-            'uf'               => 'required|exact_length[2]',
-            'local_evento'     => 'required',
+            'data_evento'      => 'required|valid_date[Y-m-d]',
+            'hora_evento'      => 'required',
             'organizacao'      => 'required',
+            'cep'              => 'required|min_length[8]',
+            'local_evento'     => 'required',
             'condicoes_acesso' => 'required',
         ];
 
         if (! $this->validate($regras)) {
-            // Se falhar, volta para o formulário com os erros e os dados preenchidos
             return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
         }
 
-        // 2. Preparar os dados para salvar
+        // 3. Valida período para usuários comuns
+        if (! $isAdmin) {
+            $dataEvento = new \DateTime($dataEvento);
+            $dataMin    = new \DateTime('2026-07-13');
+            $dataMax    = new \DateTime('2026-08-13');
+            if ($dataEvento < $dataMin || $dataEvento > $dataMax) {
+                return redirect()->back()->withInput()
+                    ->with('errors', ['data_evento' => 'A data deve estar entre 13/07/2026 e 13/08/2026. Festas fora deste período devem ser encaminhadas ao administrador.']);
+            }
+        }
+
+        // 4. Salva
         $festaModel = new FestaModel();
-        
         $dados = [
-            'user_id'          => auth()->id(), // Pega o ID do usuário logado automaticamente
+            'user_id'          => auth()->id(),
             'nome_festa'       => $this->request->getPost('nome_festa'),
-            'data_hora'        => $this->request->getPost('data_hora'),
+            'data_hora'        => $dataHora,
             'organizacao'      => $this->request->getPost('organizacao'),
+            'cep'              => preg_replace('/\D/', '', $this->request->getPost('cep')),
+            'logradouro'       => $this->request->getPost('logradouro'),
+            'bairro'           => $this->request->getPost('bairro'),
             'cidade'           => $this->request->getPost('cidade'),
-            'uf'               => $this->request->getPost('uf'),
+            'uf'               => strtoupper($this->request->getPost('uf')),
+            'numero'           => $this->request->getPost('numero'),
+            'complemento'      => $this->request->getPost('complemento'),
             'local_evento'     => $this->request->getPost('local_evento'),
             'condicoes_acesso' => $this->request->getPost('condicoes_acesso'),
             'descricao'        => $this->request->getPost('descricao'),
         ];
 
-        // 3. Tentar salvar no Banco de Dados
         if ($festaModel->save($dados)) {
             return redirect()->to('dashboard')->with('message', 'Festa cadastrada com sucesso!');
-        } else {
-            return redirect()->back()->withInput()->with('errors', $festaModel->errors());
         }
+
+        return redirect()->back()->withInput()->with('errors', $festaModel->errors());
     }
 
     // Exibe o formulário de edição

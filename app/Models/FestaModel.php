@@ -15,11 +15,16 @@ class FestaModel extends Model
     protected $allowedFields    = [
         'user_id', 
         'nome_festa', 
+        'data_hora', 
+        'organizacao',
+        'cep',
+        'logradouro',
+        'bairro',
         'cidade', 
         'uf', 
+        'numero',
+        'complemento',
         'local_evento', 
-        'data_hora', 
-        'organizacao', 
         'condicoes_acesso', 
         'descricao',
         'publico_estimado', 
@@ -36,7 +41,6 @@ class FestaModel extends Model
     // Validação básica (Segurança extra)
     protected $validationRules      = [
         'nome_festa'   => 'required|min_length[3]|max_length[255]',
-        'cidade'       => 'required',
         'data_hora'    => 'required|valid_date',
         'organizacao'  => 'required',
     ];

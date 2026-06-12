@@ -121,6 +121,61 @@
 <div class="container pb-5 mt-4">
 
     <!-- ══════════════════════════════════════════════════ -->
+    <!-- VÍDEOS DA FESTA (aparece só se houver vídeos)     -->
+    <!-- ══════════════════════════════════════════════════ -->
+    <?php
+        $videos = array_values(array_filter($midias ?? [], fn($m) => ($m['tipo'] ?? '') === 'video'));
+    ?>
+    <?php if (!empty($videos)): ?>
+    <section class="mb-5">
+
+        <!-- Player principal — primeiro vídeo -->
+        <div class="ratio ratio-16x9 rounded-3 overflow-hidden shadow mb-3"
+             style="background:#000;">
+            <video id="video-principal"
+                   src="<?= base_url('uploads/galeria/' . $videos[0]['arquivo']) ?>"
+                   controls
+                   class="w-100 h-100"
+                   style="object-fit:contain;">
+            </video>
+        </div>
+
+        <?php if (count($videos) > 1): ?>
+        <!-- Miniaturas dos demais vídeos — scroll horizontal -->
+        <div class="d-flex gap-3 overflow-auto pb-2" style="scroll-snap-type:x mandatory;">
+            <?php foreach ($videos as $i => $v): ?>
+            <div class="flex-shrink-0" style="width:200px;scroll-snap-align:start;">
+                <video src="<?= base_url('uploads/galeria/' . $v['arquivo']) ?>"
+                       class="rounded-2 w-100 video-thumb <?= $i === 0 ? 'border border-3 border-danger' : '' ?>"
+                       style="height:112px;object-fit:cover;cursor:pointer;"
+                       data-src="<?= base_url('uploads/galeria/' . $v['arquivo']) ?>"
+                       onclick="trocarVideo(this)"
+                       muted
+                       preload="metadata">
+                </video>
+            </div>
+            <?php endforeach; ?>
+        </div>
+        <script>
+        function trocarVideo(thumb) {
+            var principal = document.getElementById('video-principal');
+            principal.pause();
+            principal.src = thumb.dataset.src;
+            principal.load();
+            principal.play();
+            document.querySelectorAll('.video-thumb').forEach(function(t) {
+                t.classList.remove('border','border-3','border-danger');
+            });
+            thumb.classList.add('border','border-3','border-danger');
+        }
+        </script>
+        <?php endif; ?>
+
+    </section>
+    <?php endif; ?>
+
+
+    <!-- ══════════════════════════════════════════════════ -->
     <!-- FESTEIRO (col-4) + BLOG (col-8) na mesma linha    -->
     <!-- ══════════════════════════════════════════════════ -->
     <?php if (!empty($perfil) || !empty($post)): ?>

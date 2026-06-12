@@ -86,6 +86,8 @@ class Dashboard extends BaseController
             'local_evento'     => $this->request->getPost('local_evento'),
             'tamanho_festa'    => $this->request->getPost('tamanho_festa'),
             'descricao'        => $this->request->getPost('descricao'),
+            'video_principal'  => $this->request->getPost('video_principal') ?: null,
+            'video_secundario' => $this->request->getPost('video_secundario') ?: null,
         ];
 
         if ($festaModel->save($dados)) {
@@ -177,6 +179,8 @@ class Dashboard extends BaseController
             'descricao'        => $this->request->getPost('descricao'),
             'publico_estimado' => $this->request->getPost('publico_estimado'),
             'publico_real'     => $this->request->getPost('publico_real'),
+            'video_principal'  => $this->request->getPost('video_principal') ?: null,
+            'video_secundario' => $this->request->getPost('video_secundario') ?: null,
         ];
 
         $festaModel->update($id, $dados);

@@ -120,64 +120,41 @@
 
 <div class="container pb-5 mt-4">
 
-    <!-- ══════════════════════════════════════════════════ -->
-    <!-- VÍDEOS DA FESTA (aparece só se houver vídeos)     -->
-    <!-- ══════════════════════════════════════════════════ -->
+    <!-- ══════════════════════════════════════════════════════════ -->
+    <!-- 1) VÍDEO PRINCIPAL — embed 80% centralizado               -->
+    <!-- ══════════════════════════════════════════════════════════ -->
     <?php
-        $videos = array_values(array_filter($midias ?? [], fn($m) => ($m['tipo'] ?? '') === 'video'));
+        $embedPrincipal   = video_embed_url($festa['video_principal']   ?? null);
+        $embedSecundario  = video_embed_url($festa['video_secundario']  ?? null);
+        $fotos = array_values(array_filter($midias ?? [], fn($m) => ($m['tipo'] ?? '') !== 'video'));
     ?>
-    <?php if (!empty($videos)): ?>
-    <section class="mb-5">
-
-        <!-- Player principal — primeiro vídeo -->
-        <div class="ratio ratio-16x9 rounded-3 overflow-hidden shadow mb-3"
-             style="background:#000;">
-            <video id="video-principal"
-                   src="<?= base_url('uploads/galeria/' . $videos[0]['arquivo']) ?>"
-                   controls
-                   class="w-100 h-100"
-                   style="object-fit:contain;">
-            </video>
+    <section class="mb-5 d-flex justify-content-center">
+        <div style="width:80%;">
+            <?php if ($embedPrincipal): ?>
+                <div class="ratio ratio-16x9 rounded-3 overflow-hidden shadow">
+                    <iframe src="<?= esc($embedPrincipal) ?>"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                            allowfullscreen class="w-100 h-100">
+                    </iframe>
+                </div>
+                <p class="text-center text-muted small mt-2">
+                    <i class="bi bi-play-circle me-1"></i> Vídeo da Festa
+                </p>
+            <?php else: ?>
+                <!-- Sem vídeo cadastrado — exibe o clipe padrão -->
+                <div class="ratio ratio-16x9 rounded-3 overflow-hidden shadow">
+                    <video src="<?= base_url('video/clip.mp4') ?>"
+                           autoplay muted loop playsinline
+                           class="w-100 h-100" style="object-fit:cover;">
+                    </video>
+                </div>
+            <?php endif; ?>
         </div>
-
-        <?php if (count($videos) > 1): ?>
-        <!-- Miniaturas dos demais vídeos — scroll horizontal -->
-        <div class="d-flex gap-3 overflow-auto pb-2" style="scroll-snap-type:x mandatory;">
-            <?php foreach ($videos as $i => $v): ?>
-            <div class="flex-shrink-0" style="width:200px;scroll-snap-align:start;">
-                <video src="<?= base_url('uploads/galeria/' . $v['arquivo']) ?>"
-                       class="rounded-2 w-100 video-thumb <?= $i === 0 ? 'border border-3 border-danger' : '' ?>"
-                       style="height:112px;object-fit:cover;cursor:pointer;"
-                       data-src="<?= base_url('uploads/galeria/' . $v['arquivo']) ?>"
-                       onclick="trocarVideo(this)"
-                       muted
-                       preload="metadata">
-                </video>
-            </div>
-            <?php endforeach; ?>
-        </div>
-        <script>
-        function trocarVideo(thumb) {
-            var principal = document.getElementById('video-principal');
-            principal.pause();
-            principal.src = thumb.dataset.src;
-            principal.load();
-            principal.play();
-            document.querySelectorAll('.video-thumb').forEach(function(t) {
-                t.classList.remove('border','border-3','border-danger');
-            });
-            thumb.classList.add('border','border-3','border-danger');
-        }
-        </script>
-        <?php endif; ?>
-
     </section>
-    <?php endif; ?>
 
-
-    <!-- ══════════════════════════════════════════════════ -->
-    <!-- FESTEIRO (col-4) + BLOG (col-8) na mesma linha    -->
-    <!-- ══════════════════════════════════════════════════ -->
+    <!-- ══════════════════════════════════════════════════════════ -->
+    <!-- 2) FESTEIRO (col-4) + TEXTO DO BLOG (col-8)               -->
+    <!-- ══════════════════════════════════════════════════════════ -->
     <?php if (!empty($perfil) || !empty($post)): ?>
     <section class="mb-5">
         <div class="row g-4 align-items-stretch">
@@ -185,71 +162,44 @@
             <!-- COL 4 — Perfil do Festeiro -->
             <?php if (!empty($perfil)): ?>
             <div class="col-md-4">
-                <div class="card border-0 shadow-sm h-100">
-                    <div class="card-body p-4 text-center d-flex flex-column align-items-center justify-content-center">
-
-                        <?php if (!empty($perfil['foto'])): ?>
+                <div class="card h-100 border-0 shadow-sm text-center p-4"
+                     style="border-radius:16px;">
+                    <?php if (!empty($perfil['foto'])): ?>
                         <img src="<?= base_url('uploads/perfil/' . $perfil['foto']) ?>"
-                             alt="<?= esc($perfil['nome_completo']) ?>"
-                             class="rounded-circle mb-3"
-                             style="width:120px;height:120px;object-fit:cover;border:4px solid #C9971C;">
-                        <?php else: ?>
-                        <div class="rounded-circle mb-3 mx-auto d-flex align-items-center justify-content-center bg-light"
-                             style="width:120px;height:120px;border:4px solid #C9971C;">
-                            <i class="bi bi-person-fill text-secondary" style="font-size:3rem;"></i>
+                             alt="Foto do Festeiro"
+                             class="rounded-circle mx-auto mb-3 shadow"
+                             style="width:110px;height:110px;object-fit:cover;border:4px solid #C9971C;">
+                    <?php else: ?>
+                        <div class="rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center shadow"
+                             style="width:110px;height:110px;background:#b71c1c;">
+                            <i class="bi bi-person-fill text-white" style="font-size:2.5rem;"></i>
                         </div>
-                        <?php endif; ?>
+                    <?php endif; ?>
 
-                        <h5 class="fw-bold mb-2"><?= esc($perfil['nome_completo']) ?></h5>
+                    <h5 class="fw-bold mb-0"><?= esc($perfil['nome_display'] ?? '') ?></h5>
 
-                        <?php if (!empty($perfil['profissao'])): ?>
-                            <p class="text-muted small mb-1">
-                                <i class="bi bi-briefcase me-1"></i><?= esc($perfil['profissao']) ?>
-                            </p>
-                        <?php endif; ?>
-                        <?php if (!empty($perfil['filiacao'])): ?>
-                            <p class="small mb-1">
-                                <i class="bi bi-flag me-1 text-danger"></i><?= esc($perfil['filiacao']) ?>
-                            </p>
-                        <?php endif; ?>
-                        <?php if (!empty($perfil['representa_entidade'])): ?>
-                            <p class="small mb-1 text-muted">
-                                <i class="bi bi-building me-1"></i><?= esc($perfil['representa_entidade']) ?>
-                            </p>
-                        <?php endif; ?>
-                        <?php if (!empty($perfil['historico_cargos'])): ?>
-                            <details class="mt-2 text-start w-100">
-                                <summary class="fw-semibold text-primary small" style="cursor:pointer;">
-                                    <i class="bi bi-journal-text me-1"></i>Trajetória
-                                </summary>
-                                <div class="mt-2 text-muted small"
-                                     style="white-space:pre-line;border-left:3px solid #C9971C;padding-left:10px;">
-                                    <?= esc($perfil['historico_cargos']) ?>
-                                </div>
-                            </details>
-                        <?php endif; ?>
+                    <?php if (!empty($perfil['mini_curriculo'])): ?>
+                    <p class="text-muted small mt-2 mb-0"><?= esc($perfil['mini_curriculo']) ?></p>
+                    <?php endif; ?>
 
-                        <div class="mt-3 pt-2 border-top w-100">
-                            <small class="text-muted fw-semibold text-uppercase" style="letter-spacing:.05em;">
-                                <i class="bi bi-person-heart me-1 text-danger"></i>Festeiro Lulino
-                            </small>
-                        </div>
+                    <div class="mt-3">
+                        <span class="badge bg-danger fw-semibold">Festeiro</span>
                     </div>
                 </div>
             </div>
             <?php endif; ?>
 
-            <!-- COL 8 — Blog / Sobre a Festa -->
+            <!-- COL 8 — Texto do Blog -->
             <?php if (!empty($post)): ?>
             <div class="col-md-<?= !empty($perfil) ? '8' : '12' ?>">
-                <div class="card border-0 shadow-sm h-100">
-                    <div class="card-body p-4">
-                        <h5 class="fw-bold text-danger border-bottom pb-2 mb-3">
-                            <i class="bi bi-newspaper me-2"></i>Sobre a Festa
-                        </h5>
-                        <div class="blog-content lh-lg" style="font-size:1.05rem;">
-                            <?= $post['conteudo'] ?>
-                        </div>
+                <div class="card h-100 border-0 shadow-sm p-4"
+                     style="border-radius:16px;">
+                    <div class="d-flex align-items-center gap-2 mb-3">
+                        <i class="bi bi-pencil-square text-danger fs-5"></i>
+                        <h5 class="fw-bold mb-0 text-danger">Sobre esta Festa</h5>
+                    </div>
+                    <div class="post-content" style="line-height:1.7;color:#333;">
+                        <?= $post['conteudo'] ?>
                     </div>
                 </div>
             </div>
@@ -259,71 +209,100 @@
     </section>
     <?php endif; ?>
 
-    <!-- ══════════════════════════════════════════════════ -->
-    <!-- GALERIA                                           -->
-    <!-- ══════════════════════════════════════════════════ -->
+    <!-- ══════════════════════════════════════════════════════════ -->
+    <!-- 3) GALERIA DE FOTOS — carrossel horizontal                 -->
+    <!-- ══════════════════════════════════════════════════════════ -->
+    <?php if (!empty($fotos)): ?>
     <section class="mb-5">
-        <h5 class="fw-bold text-danger border-bottom pb-2 mb-3">
-            <i class="bi bi-images me-2"></i>Galeria
-        </h5>
-        <?php if (empty($midias)): ?>
-            <div class="text-center py-5 text-muted bg-light rounded border">
-                <i class="bi bi-images fs-1 d-block mb-3"></i>
-                <h5>Galeria em breve</h5>
-                <p>As fotos deste evento ainda estão sendo selecionadas.</p>
-            </div>
-        <?php else: ?>
-            <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 g-4">
-                <?php foreach ($midias as $item): ?>
-                <div class="col">
-                    <div class="card h-100 border-0 shadow-sm overflow-hidden">
-                        <div class="ratio ratio-4x3 bg-light">
-                            <?php if ($item['tipo'] === 'video'): ?>
-                                <video src="<?= base_url('uploads/galeria/' . $item['arquivo']) ?>"
-                                       controls class="object-fit-cover w-100 h-100"></video>
-                            <?php else: ?>
-                                <a href="<?= base_url('uploads/galeria/' . $item['arquivo']) ?>" target="_blank">
-                                    <img src="<?= base_url('uploads/galeria/' . $item['arquivo']) ?>"
-                                         class="object-fit-cover w-100 h-100 hover-zoom"
-                                         alt="Registro da Festa">
-                                </a>
-                            <?php endif; ?>
-                        </div>
-                    </div>
-                </div>
-                <?php endforeach; ?>
-            </div>
-        <?php endif; ?>
-    </section>
+        <div class="d-flex align-items-center gap-2 mb-3">
+            <i class="bi bi-images text-danger fs-5"></i>
+            <h5 class="fw-bold mb-0 text-danger">Galeria</h5>
+            <span class="badge bg-danger ms-1"><?= count($fotos) ?></span>
+        </div>
 
-    <!-- ══════════════════════════════════════════════════ -->
-    <!-- HOMENAGEADOS (antes de links)                     -->
-    <!-- ══════════════════════════════════════════════════ -->
+        <!-- Carrossel de fotos com scroll horizontal -->
+        <div id="galeria-scroll"
+             class="d-flex gap-3 overflow-auto pb-2"
+             style="scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;cursor:grab;">
+            <?php foreach ($fotos as $i => $foto): ?>
+            <div class="flex-shrink-0"
+                 style="width:280px;scroll-snap-align:start;">
+                <a href="<?= base_url('uploads/galeria/' . $foto['arquivo']) ?>"
+                   target="_blank"
+                   class="d-block">
+                    <img src="<?= base_url('uploads/galeria/' . $foto['arquivo']) ?>"
+                         alt="Foto <?= $i + 1 ?>"
+                         loading="lazy"
+                         class="w-100 rounded-3 shadow-sm"
+                         style="height:200px;object-fit:cover;transition:transform .2s;"
+                         onmouseover="this.style.transform='scale(1.03)'"
+                         onmouseout="this.style.transform='scale(1)'">
+                </a>
+            </div>
+            <?php endforeach; ?>
+        </div>
+
+        <!-- Navegação discreta por teclado/botão -->
+        <div class="d-flex justify-content-end gap-2 mt-2">
+            <button onclick="document.getElementById('galeria-scroll').scrollBy({left:-300,behavior:'smooth'})"
+                    class="btn btn-sm btn-outline-secondary rounded-circle" style="width:34px;height:34px;padding:0;">
+                ‹
+            </button>
+            <button onclick="document.getElementById('galeria-scroll').scrollBy({left:300,behavior:'smooth'})"
+                    class="btn btn-sm btn-outline-secondary rounded-circle" style="width:34px;height:34px;padding:0;">
+                ›
+            </button>
+        </div>
+    </section>
+    <?php endif; ?>
+
+    <!-- ══════════════════════════════════════════════════════════ -->
+    <!-- 4) VÍDEO SECUNDÁRIO — embed (só se houver)                 -->
+    <!-- ══════════════════════════════════════════════════════════ -->
+    <?php if ($embedSecundario): ?>
+    <section class="mb-5 d-flex justify-content-center">
+        <div style="width:80%;">
+            <div class="d-flex align-items-center gap-2 mb-3">
+                <i class="bi bi-camera-video text-danger fs-5"></i>
+                <h5 class="fw-bold mb-0 text-danger">Mais um Vídeo</h5>
+            </div>
+            <div class="ratio ratio-16x9 rounded-3 overflow-hidden shadow">
+                <iframe src="<?= esc($embedSecundario) ?>"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allowfullscreen class="w-100 h-100">
+                </iframe>
+            </div>
+        </div>
+    </section>
+    <?php endif; ?>
+
+    <!-- ══════════════════════════════════════════════════════════ -->
+    <!-- 5) HOMENAGEADOS                                            -->
+    <!-- ══════════════════════════════════════════════════════════ -->
     <?php if (!empty($homenageados)): ?>
     <section class="mb-5">
-        <h5 class="fw-bold text-danger border-bottom pb-2 mb-4">
-            <i class="bi bi-stars me-2"></i>Homenageados da Festa
-        </h5>
-        <div class="row row-cols-2 row-cols-md-3 row-cols-lg-4 g-4">
+        <div class="d-flex align-items-center gap-2 mb-4">
+            <i class="bi bi-star-fill text-warning fs-5"></i>
+            <h5 class="fw-bold mb-0 text-danger">Homenageados</h5>
+        </div>
+        <div class="row row-cols-2 row-cols-md-3 row-cols-lg-5 g-4">
             <?php foreach ($homenageados as $hom): ?>
             <div class="col text-center">
                 <?php if (!empty($hom['foto'])): ?>
                     <img src="<?= base_url('uploads/homenageados/' . $hom['foto']) ?>"
+                         class="rounded-circle shadow mb-2"
+                         style="width:90px;height:90px;object-fit:cover;border:3px solid #C9971C;"
                          alt="<?= esc($hom['nome']) ?>"
-                         class="rounded-circle mb-2"
-                         style="width:90px;height:90px;object-fit:cover;border:3px solid #C9971C;">
+                         onerror="this.onerror=null;this.src='https://ui-avatars.com/api/?name=<?= urlencode($hom['nome']) ?>&size=90&background=1565C0&color=fff&bold=true&rounded=true'">
                 <?php else: ?>
-                    <div class="rounded-circle mb-2 mx-auto d-flex align-items-center justify-content-center bg-light"
-                         style="width:90px;height:90px;border:3px solid #C9971C;">
-                        <i class="bi bi-person-fill text-secondary fs-2"></i>
-                    </div>
+                    <img src="https://ui-avatars.com/api/?name=<?= urlencode($hom['nome']) ?>&size=90&background=b71c1c&color=fff&bold=true&rounded=true"
+                         class="rounded-circle shadow mb-2"
+                         style="width:90px;height:90px;border:3px solid #C9971C;"
+                         alt="<?= esc($hom['nome']) ?>">
                 <?php endif; ?>
-                <div class="fw-bold"><?= esc($hom['nome']) ?></div>
-                <?php if (!empty($hom['titulo'])): ?>
-                    <div class="text-muted small"><?= esc($hom['titulo']) ?></div>
-                <?php endif; ?>
-                <?php if (!empty($hom['frase'])): ?>
-                    <p class="text-muted small mt-1 fst-italic">"<?= esc($hom['frase']) ?>"</p>
+                <div class="fw-semibold small"><?= esc($hom['nome']) ?></div>
+                <?php if (!empty($hom['descricao'])): ?>
+                <div class="text-muted" style="font-size:.75rem;"><?= esc($hom['descricao']) ?></div>
                 <?php endif; ?>
             </div>
             <?php endforeach; ?>
@@ -331,28 +310,27 @@
     </section>
     <?php endif; ?>
 
-    <!-- ══════════════════════════════════════════════════ -->
-    <!-- LINKS INTERESSANTES (por último)                  -->
-    <!-- ══════════════════════════════════════════════════ -->
+    <!-- ══════════════════════════════════════════════════════════ -->
+    <!-- 6) LINKS APROVADOS                                         -->
+    <!-- ══════════════════════════════════════════════════════════ -->
     <?php if (!empty($links)): ?>
     <section class="mb-5">
-        <h5 class="fw-bold text-danger border-bottom pb-2 mb-3">
-            <i class="bi bi-link-45deg me-2"></i>Links Interessantes
-        </h5>
-        <div class="row row-cols-1 row-cols-md-2 g-2">
+        <div class="d-flex align-items-center gap-2 mb-3">
+            <i class="bi bi-link-45deg text-danger fs-5"></i>
+            <h5 class="fw-bold mb-0 text-danger">Links</h5>
+        </div>
+        <div class="row row-cols-1 row-cols-md-2 g-3">
             <?php foreach ($links as $link): ?>
             <div class="col">
                 <a href="<?= esc($link['url']) ?>" target="_blank" rel="noopener"
-                   class="d-flex align-items-center gap-3 text-decoration-none p-3 border rounded bg-light hover-card">
-                    <div class="rounded-circle d-flex align-items-center justify-content-center flex-shrink-0"
-                         style="width:40px;height:40px;background:#1565C0;color:#fff;">
-                        <i class="bi bi-link-45deg fs-5"></i>
-                    </div>
-                    <div>
-                        <div class="fw-semibold text-dark"><?= esc($link['titulo']) ?></div>
-                        <small class="text-muted text-truncate d-block" style="max-width:300px;">
-                            <?= esc(parse_url($link['url'], PHP_URL_HOST)) ?>
-                        </small>
+                   class="d-flex align-items-center gap-3 p-3 text-decoration-none rounded-3 border shadow-sm bg-white"
+                   style="transition:box-shadow .2s;"
+                   onmouseover="this.style.boxShadow='0 4px 16px rgba(183,28,28,.15)'"
+                   onmouseout="this.style.boxShadow=''">
+                    <i class="bi bi-box-arrow-up-right text-danger fs-5"></i>
+                    <div class="overflow-hidden">
+                        <div class="fw-semibold text-truncate"><?= esc($link['titulo']) ?></div>
+                        <div class="text-muted small text-truncate"><?= esc($link['url']) ?></div>
                     </div>
                 </a>
             </div>
@@ -371,13 +349,10 @@
 </div>
 
 <style>
-.hover-zoom { transition: transform .3s ease; }
-.hover-zoom:hover { transform: scale(1.05); }
-.hover-card { transition: box-shadow .2s; }
-.hover-card:hover { box-shadow: 0 4px 12px rgba(0,0,0,.15) !important; }
-.blog-content h2 { font-size: 1.5rem; font-weight: 700; color: #b71c1c; margin-top: 1.5rem; }
-.blog-content h3 { font-size: 1.2rem; font-weight: 600; color: #333; margin-top: 1rem; }
-.blog-content blockquote { border-left: 4px solid #C9971C; padding-left: 1rem; color: #555; font-style: italic; margin: 1rem 0; }
+#galeria-scroll:active { cursor: grabbing; }
+#galeria-scroll { scrollbar-width: thin; scrollbar-color: #b71c1c #f0f0f0; }
+#galeria-scroll::-webkit-scrollbar { height: 6px; }
+#galeria-scroll::-webkit-scrollbar-thumb { background: #b71c1c; border-radius: 3px; }
 </style>
 
 <?= $this->endSection() ?>

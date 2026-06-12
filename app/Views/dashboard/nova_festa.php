@@ -214,6 +214,66 @@
 
                         </div><!-- /row -->
 
+                        <!-- Bloco de vídeos -->
+                        <div class="row g-3">
+                            <!-- ── Links de Vídeo ──────────────────────────────────── -->
+                            <div class="col-12">
+                                <div class="card border-0 bg-light p-3 rounded-3">
+                                    <div class="d-flex align-items-center gap-2 mb-2">
+                                        <i class="bi bi-camera-video text-danger fs-5"></i>
+                                        <h6 class="fw-bold mb-0">Vídeos da Festa <span class="text-muted fw-normal">(Opcional)</span></h6>
+                                    </div>
+
+                                    <!-- Tutorial em accordion -->
+                                    <div class="accordion accordion-flush mb-3" id="acc-tutorial-video">
+                                        <div class="accordion-item border rounded-2">
+                                            <h2 class="accordion-header">
+                                                <button class="accordion-button collapsed py-2 px-3 small" type="button"
+                                                        data-bs-toggle="collapse" data-bs-target="#tutorial-video">
+                                                    <i class="bi bi-question-circle me-2"></i>
+                                                    Como obter o link do YouTube ou Vimeo?
+                                                </button>
+                                            </h2>
+                                            <div id="tutorial-video" class="accordion-collapse collapse">
+                                                <div class="accordion-body small py-2">
+                                                    <p class="fw-semibold mb-2">YouTube:</p>
+                                                    <ol class="mb-3">
+                                                        <li>Abra o vídeo no YouTube</li>
+                                                        <li>Clique em <strong>Compartilhar</strong> (ícone de seta)</li>
+                                                        <li>Copie o link curto (<code>https://youtu.be/XXXXX</code>)</li>
+                                                        <li>Cole no campo abaixo</li>
+                                                    </ol>
+                                                    <p class="fw-semibold mb-2">Vimeo:</p>
+                                                    <ol class="mb-0">
+                                                        <li>Abra o vídeo no Vimeo</li>
+                                                        <li>Copie o endereço da página (<code>https://vimeo.com/123456</code>)</li>
+                                                        <li>Cole no campo abaixo</li>
+                                                    </ol>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row g-3">
+                                        <div class="col-12">
+                                            <label class="form-label fw-semibold small">Vídeo Principal</label>
+                                            <input type="url" name="video_principal" class="form-control"
+                                                   placeholder="Ex: https://youtu.be/XXXXX ou https://vimeo.com/123456"
+                                                   value="<?= old('video_principal') ?>">
+                                            <div class="form-text">Aparece em destaque no topo da sua página pública.</div>
+                                        </div>
+                                        <div class="col-12">
+                                            <label class="form-label fw-semibold small">Vídeo Secundário <span class="text-muted">(opcional)</span></label>
+                                            <input type="url" name="video_secundario" class="form-control"
+                                                   placeholder="Ex: https://youtu.be/XXXXX ou https://vimeo.com/123456"
+                                                   value="<?= old('video_secundario') ?>">
+                                            <div class="form-text">Aparece após a galeria de fotos.</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div><!-- /videos -->
+
                         <!-- Campo oculto que junta data + hora antes de enviar -->
                         <input type="hidden" name="data_hora" id="data_hora">
 

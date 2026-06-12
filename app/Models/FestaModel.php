@@ -30,7 +30,9 @@ class FestaModel extends Model
         'condicoes_acesso',
         'descricao',
         'publico_estimado',
-        'publico_real'
+        'publico_real',
+        'video_principal',
+        'video_secundario',
     ];
 
     // Datas

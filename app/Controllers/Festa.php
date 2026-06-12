@@ -11,6 +11,12 @@ use App\Models\UserProfileModel;
 
 class Festa extends BaseController
 {
+    public function initController(\CodeIgniter\HTTP\RequestInterface $request, \CodeIgniter\HTTP\ResponseInterface $response, \Psr\Log\LoggerInterface $logger): void
+    {
+        parent::initController($request, $response, $logger);
+        helper('video');
+    }
+
     /**
      * Exibe a página pública de uma festa.
      * Aceita /festa/{slug} (SEO) ou /festa/{id} (retrocompatibilidade).

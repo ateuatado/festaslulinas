@@ -4,7 +4,7 @@
 <?= $this->section('content') ?>
 
 <!-- ============================================================
-     CARROSSEL — 2 banners horizontais
+     CARROSSEL — mantém full-width (é o hero)
      ============================================================ -->
 <div class="hero-carousel" style="background-color:#ffffff; border-bottom:4px solid #C9971C;">
     <div id="carrosselLulinas" class="carousel slide" data-bs-ride="carousel" data-bs-interval="5000">
@@ -39,7 +39,7 @@
 </div>
 
 <!-- ============================================================
-     FAIXA CTA
+     FAIXA CTA — mantém full-width (é uma faixa de destaque)
      ============================================================ -->
 <div class="faixa-cta" style="background-color:#C9971C; border-bottom:3px solid #111; padding:1rem 0;">
     <div class="container">
@@ -68,32 +68,36 @@
 </div>
 
 <!-- ============================================================
-     POSTER VERTICAL + CHAMADA
+     CORPO DA PÁGINA — tudo dentro de um container
      ============================================================ -->
-<section class="secao-poster" style="background-color:#111111; padding:4rem 0; border-top:4px solid #C9971C; border-bottom:4px solid #C9971C;">
-    <div class="container">
-        <div class="row align-items-center g-4 g-lg-5">
+<div class="container py-5">
+
+    <!-- POSTER VERTICAL + CHAMADA ─────────────────────────── -->
+    <div class="rounded-4 overflow-hidden mb-5"
+         style="background-color:#111111; border:3px solid #C9971C;">
+        <div class="row align-items-center g-0">
 
             <!-- Poster -->
-            <div class="col-12 col-md-4 text-center">
+            <div class="col-12 col-md-4 text-center p-4 p-md-5"
+                 style="border-right:3px solid #C9971C;">
                 <img src="<?= base_url('assets/img/poster_vertical.png') ?>"
-                     class="poster-img img-fluid"
-                     style="max-width:300px; width:100%; border:4px solid #C9971C; border-radius:8px;"
+                     class="img-fluid"
+                     style="max-width:260px; width:100%; border:4px solid #C9971C; border-radius:8px;"
                      alt="Festas Lulinas - O Festival de Festas Esta Chegando">
             </div>
 
             <!-- Texto -->
-            <div class="col-12 col-md-8 text-center text-md-start">
+            <div class="col-12 col-md-8 p-4 p-md-5 text-center text-md-start">
                 <h2 style="font-family:'Bebas Neue',Impact,sans-serif; font-size:3rem; color:#C9971C; line-height:1.05; letter-spacing:0.05em;">
                     O MUNDO<br>CELEBRA LULA
                 </h2>
-                <div class="datas" style="font-weight:700; color:#F0B429; text-transform:uppercase; letter-spacing:0.06em; border-left:4px solid #C8102E; padding-left:1rem; margin:1rem 0;">
+                <div style="font-weight:700; color:#F0B429; text-transform:uppercase; letter-spacing:0.06em; border-left:4px solid #C8102E; padding-left:1rem; margin:1rem 0;">
                     De 13 de julho a 13 de agosto de 2026
                 </div>
-                <p style="color:#cccccc; font-size:1rem; line-height:1.6;">
+                <p style="color:#cccccc; font-size:1rem; line-height:1.7;">
                     As Festas Lulinas, movimento cultural popular que referenda o legado do presidente Lula com alegria, arte e resistência — do Boi Mamão aos bois de Parintins passando por São João, balançando no samba, coco, tecnobrega enfim todas as manifestações culturais que ele sempre apoiou e deu amplitude em seus governos, nosso tempo e cultura vista com soberania e apoiando nossas luta.
                 </p>
-                <p style="color:#cccccc; font-size:1rem; line-height:1.6;">
+                <p style="color:#cccccc; font-size:1rem; line-height:1.7;">
                     Cadastre sua festa, envie fotos e vídeos, e receba materiais de apoio
                     para celebrar o Brasil Lulino em todo o território nacional.
                 </p>
@@ -112,20 +116,16 @@
 
         </div>
     </div>
-</section>
 
-<!-- ============================================================
-     APOIADORES
-     ============================================================ -->
-<section class="secao-apoiadores" style="background-color:#F5F0E8; padding:4rem 0; border-top:4px solid #C9971C;">
-    <div class="container text-center">
-
-        <h2 class="mb-5" style="font-family:'Bebas Neue',Impact,sans-serif; font-size:2.5rem; color:#111; letter-spacing:0.04em;">
+    <!-- APOIADORES ──────────────────────────────────────────── -->
+    <div class="rounded-4 p-4 p-md-5" style="background-color:#F5F0E8; border:3px solid #C9971C;">
+        <h2 class="text-center mb-5"
+            style="font-family:'Bebas Neue',Impact,sans-serif; font-size:2.5rem; color:#111; letter-spacing:0.04em;">
             Quem Apoia Essa Ideia
         </h2>
 
         <?php if (empty($apoiadores)): ?>
-            <p class="text-muted">Galeria em atualizacao.</p>
+            <p class="text-muted text-center">Galeria em atualizacao.</p>
         <?php else: ?>
             <div class="row row-cols-2 row-cols-md-3 row-cols-lg-5 g-4 justify-content-center">
                 <?php foreach ($apoiadores as $item): ?>
@@ -152,9 +152,9 @@
                 <?php endforeach; ?>
             </div>
         <?php endif; ?>
-
     </div>
-</section>
+
+</div><!-- /container -->
 
 <?= $this->endSection() ?>
 

@@ -24,6 +24,15 @@
                 <?php if (auth()->loggedIn()): ?>
 
                     <li class="nav-item">
+                        <a href="<?= base_url('perfil') ?>"
+                           class="nav-link text-white fw-semibold d-flex align-items-center gap-1"
+                           title="Meu Perfil de Festeiro">
+                            <i class="bi bi-person-circle"></i>
+                            <span class="d-lg-inline">Meu Perfil</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
                         <a href="<?= base_url('dashboard') ?>"
                            class="btn btn-outline-warning btn-sm fw-bold d-flex align-items-center gap-1 text-white">
                             <i class="bi bi-grid-fill"></i> Minhas Festas

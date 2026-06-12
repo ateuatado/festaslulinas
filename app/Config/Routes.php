@@ -32,6 +32,12 @@ $routes->group('dashboard', ['filter' => 'session'], function ($routes) {
     $routes->get('excluir/(:num)', 'Dashboard::excluir/$1');
 });
 
+// === Perfil de Festeiro (exige login) ===
+$routes->group('perfil', ['filter' => 'session'], function ($routes) {
+    $routes->get('/', 'PerfilController::index');
+    $routes->post('salvar', 'PerfilController::salvar');
+});
+
 // === Loja vinculada a uma festa (exige login) ===
 $routes->group('loja', ['filter' => 'session'], function ($routes) {
     $routes->get('(:num)', 'Loja::index/$1');           // loja/{festaId}

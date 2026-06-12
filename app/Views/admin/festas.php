@@ -102,10 +102,90 @@
     </div>
     <?php endif; ?>
 
-    <?php if (empty($postsPend) && empty($linksPend)): ?>
+    <?php if (empty($postsPend) && empty($linksPend) && empty($postsApr) && empty($linksApr)): ?>
     <div class="alert alert-success border-0 mb-4 d-flex align-items-center gap-2">
         <i class="bi bi-check-circle-fill fs-5"></i>
         <span>Nenhum post ou link aguardando aprovação. Tudo em dia! ✅</span>
+    </div>
+    <?php endif; ?>
+
+    <!-- ══════════════════════════════════════════════════ -->
+    <!-- POSTS APROVADOS (com botão de retirar)            -->
+    <!-- ══════════════════════════════════════════════════ -->
+    <?php if (!empty($postsApr)): ?>
+    <div class="card border-0 shadow-sm mb-4 border-start border-4 border-success">
+        <div class="card-header d-flex align-items-center gap-2" style="background:#e8f5e9;">
+            <i class="bi bi-pencil-square text-success fs-5"></i>
+            <strong>Blog — Posts Aprovados</strong>
+            <span class="badge bg-success ms-auto"><?= count($postsApr) ?></span>
+        </div>
+        <div class="list-group list-group-flush">
+            <?php foreach ($postsApr as $post): ?>
+            <div class="list-group-item">
+                <div class="d-flex align-items-start gap-3 flex-wrap">
+                    <div class="flex-grow-1">
+                        <div class="fw-bold">
+                            <?= esc($post['nome_festa']) ?>
+                            <small class="text-muted fw-normal ms-2">
+                                <?= date('d/m/Y H:i', strtotime($post['updated_at'])) ?>
+                            </small>
+                        </div>
+                        <p class="text-muted mb-0 small mt-1"
+                           style="display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;">
+                            <?= esc(strip_tags($post['conteudo'])) ?>
+                        </p>
+                        <?php if (!empty($post['slug'])): ?>
+                        <a href="<?= base_url('festa/' . $post['slug']) ?>" target="_blank" class="small text-primary">
+                            <i class="bi bi-box-arrow-up-right"></i> Ver página pública
+                        </a>
+                        <?php endif; ?>
+                    </div>
+                    <div class="flex-shrink-0">
+                        <a href="<?= base_url('admin/post/' . $post['id'] . '/pendente') ?>"
+                           class="btn btn-sm btn-outline-warning"
+                           onclick="return confirm('Retirar aprovação? O texto voltará para análise.')">
+                            <i class="bi bi-arrow-counterclockwise me-1"></i>Retirar Aprovação
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <?php endforeach; ?>
+        </div>
+    </div>
+    <?php endif; ?>
+
+    <!-- ══════════════════════════════════════════════════ -->
+    <!-- LINKS APROVADOS (com botão de retirar)            -->
+    <!-- ══════════════════════════════════════════════════ -->
+    <?php if (!empty($linksApr)): ?>
+    <div class="card border-0 shadow-sm mb-4 border-start border-4 border-success">
+        <div class="card-header d-flex align-items-center gap-2" style="background:#e8f5e9;">
+            <i class="bi bi-link-45deg text-success fs-5"></i>
+            <strong>Links Aprovados</strong>
+            <span class="badge bg-success ms-auto"><?= count($linksApr) ?></span>
+        </div>
+        <div class="list-group list-group-flush">
+            <?php foreach ($linksApr as $link): ?>
+            <div class="list-group-item">
+                <div class="d-flex align-items-center gap-3 flex-wrap">
+                    <div class="flex-grow-1">
+                        <div class="fw-semibold"><?= esc($link['titulo']) ?></div>
+                        <a href="<?= esc($link['url']) ?>" target="_blank" rel="noopener" class="small text-primary">
+                            <?= esc($link['url']) ?>
+                        </a>
+                        <small class="text-muted d-block">Festa: <?= esc($link['nome_festa']) ?></small>
+                    </div>
+                    <div class="flex-shrink-0">
+                        <a href="<?= base_url('admin/link/' . $link['id'] . '/pendente') ?>"
+                           class="btn btn-sm btn-outline-warning"
+                           onclick="return confirm('Retirar aprovação? O link voltará para análise.')">
+                            <i class="bi bi-arrow-counterclockwise me-1"></i>Retirar Aprovação
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <?php endforeach; ?>
+        </div>
     </div>
     <?php endif; ?>
 

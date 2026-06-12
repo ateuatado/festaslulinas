@@ -38,12 +38,22 @@ class Admin extends BaseController
         $this->checkAdmin();
 
         $midiaModel = new MidiaModel();
-        $pendentes  = $midiaModel->select('midias.*, festas.nome_festa, festas.cidade, festas.uf')
-                                 ->join('festas', 'festas.id = midias.festa_id')
-                                 ->where('midias.status', 'pendente')
-                                 ->findAll();
 
-        return view('admin/midias', ['pendentes' => $pendentes]);
+        $pendentes = $midiaModel->select('midias.*, festas.nome_festa, festas.cidade, festas.uf')
+                                ->join('festas', 'festas.id = midias.festa_id')
+                                ->where('midias.status', 'pendente')
+                                ->findAll();
+
+        $aprovadas = $midiaModel->select('midias.*, festas.nome_festa, festas.cidade, festas.uf')
+                                ->join('festas', 'festas.id = midias.festa_id')
+                                ->where('midias.status', 'aprovado')
+                                ->orderBy('midias.updated_at', 'DESC')
+                                ->findAll(50); // limita a 50 para não sobrecarregar
+
+        return view('admin/midias', [
+            'pendentes' => $pendentes,
+            'aprovadas' => $aprovadas,
+        ]);
     }
 
     public function statusMidia($id, $novoStatus)
@@ -128,27 +138,33 @@ class Admin extends BaseController
     {
         $this->checkAdmin();
 
-        $festas      = (new FestaModel())->orderBy('created_at', 'DESC')->findAll();
-        $postsPend   = (new FestaPostModel())->where('status', 'pendente')
-                                             ->orderBy('updated_at', 'DESC')->findAll();
-        $linksPend   = (new FestaLinkModel())->where('status', 'pendente')
-                                             ->orderBy('id', 'DESC')->findAll();
+        $festas    = (new FestaModel())->orderBy('created_at', 'DESC')->findAll();
+        $festaMap  = array_column($festas, null, 'id');
 
-        // Enriquecer com nome da festa
-        $festaMap = array_column($festas, null, 'id');
-        foreach ($postsPend as &$p) {
-            $p['nome_festa'] = $festaMap[$p['festa_id']]['nome_festa'] ?? '(Festa #' . $p['festa_id'] . ')';
-            $p['slug']       = $festaMap[$p['festa_id']]['slug'] ?? null;
-        }
-        foreach ($linksPend as &$l) {
-            $l['nome_festa'] = $festaMap[$l['festa_id']]['nome_festa'] ?? '(Festa #' . $l['festa_id'] . ')';
-        }
-        unset($p, $l);
+        $enrich = function (array &$rows) use ($festaMap): void {
+            foreach ($rows as &$row) {
+                $row['nome_festa'] = $festaMap[$row['festa_id']]['nome_festa'] ?? '(Festa #' . $row['festa_id'] . ')';
+                $row['slug']       = $festaMap[$row['festa_id']]['slug'] ?? null;
+            }
+            unset($row);
+        };
+
+        $postsPend = (new FestaPostModel())->where('status', 'pendente')->orderBy('updated_at', 'DESC')->findAll();
+        $postsApr  = (new FestaPostModel())->where('status', 'aprovado')->orderBy('updated_at', 'DESC')->findAll();
+        $linksPend = (new FestaLinkModel())->where('status', 'pendente')->orderBy('id', 'DESC')->findAll();
+        $linksApr  = (new FestaLinkModel())->where('status', 'aprovado')->orderBy('id', 'DESC')->findAll();
+
+        $enrich($postsPend);
+        $enrich($postsApr);
+        $enrich($linksPend);
+        $enrich($linksApr);
 
         return view('admin/festas', [
-            'festas'      => $festas,
-            'postsPend'   => $postsPend,
-            'linksPend'   => $linksPend,
+            'festas'    => $festas,
+            'postsPend' => $postsPend,
+            'postsApr'  => $postsApr,
+            'linksPend' => $linksPend,
+            'linksApr'  => $linksApr,
         ]);
     }
 
@@ -163,7 +179,7 @@ class Admin extends BaseController
     public function statusPost($id, $novoStatus)
     {
         $this->checkAdmin();
-        if (! in_array($novoStatus, ['aprovado', 'rejeitado'], true)) {
+        if (! in_array($novoStatus, ['aprovado', 'rejeitado', 'pendente'], true)) {
             return redirect()->back()->with('error', 'Status inválido.');
         }
         (new FestaPostModel())->update($id, ['status' => $novoStatus]);
@@ -175,7 +191,7 @@ class Admin extends BaseController
     public function statusLink($id, $novoStatus)
     {
         $this->checkAdmin();
-        if (! in_array($novoStatus, ['aprovado', 'rejeitado'], true)) {
+        if (! in_array($novoStatus, ['aprovado', 'rejeitado', 'pendente'], true)) {
             return redirect()->back()->with('error', 'Status inválido.');
         }
         (new FestaLinkModel())->update($id, ['status' => $novoStatus]);

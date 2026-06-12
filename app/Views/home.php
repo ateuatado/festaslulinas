@@ -44,25 +44,40 @@
 <div class="container py-5">
 
     <!-- FAIXA CTA ──────────────────────────────────────────── -->
-    <div class="rounded-4 mb-4 px-4 py-3 d-flex flex-wrap align-items-center justify-content-between gap-3"
+    <div class="rounded-4 mb-4 px-4 py-3"
          style="background-color:#C9971C; border:3px solid #111;">
-        <p class="cta-text mb-0 fw-bold" style="text-transform:uppercase; letter-spacing:0.03em; color:#111;">
-            Organize seu comite, chame a comunidade e faca parte dessa historia.
-        </p>
-        <div class="d-flex gap-3 flex-wrap">
-            <?php if (auth()->loggedIn()): ?>
-                <a href="<?= base_url('dashboard') ?>" class="btn btn-dark fw-bold text-warning">
-                    <i class="bi bi-grid-fill me-1"></i> Acessar Painel
-                </a>
-            <?php else: ?>
-                <a href="<?= base_url('register') ?>" class="btn btn-danger fw-bold px-4">
-                    <i class="bi bi-star-fill me-1"></i> QUERO ORGANIZAR
-                </a>
-                <a href="<?= base_url('login') ?>" class="btn btn-outline-dark fw-bold px-4">
-                    Entrar
-                </a>
-            <?php endif; ?>
+
+        <!-- Linha 1: texto + botões -->
+        <div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
+            <p class="cta-text mb-0 fw-bold" style="text-transform:uppercase; letter-spacing:0.03em; color:#111;">
+                Organize seu comite, chame a comunidade e faca parte dessa historia.
+            </p>
+            <div class="d-flex gap-3 flex-wrap">
+                <?php if (auth()->loggedIn()): ?>
+                    <a href="<?= base_url('dashboard') ?>" class="btn btn-dark fw-bold text-warning">
+                        <i class="bi bi-grid-fill me-1"></i> Acessar Painel
+                    </a>
+                <?php else: ?>
+                    <a href="<?= base_url('register') ?>" class="btn btn-danger fw-bold px-4">
+                        <i class="bi bi-star-fill me-1"></i> QUERO ORGANIZAR
+                    </a>
+                    <a href="<?= base_url('login') ?>" class="btn btn-outline-dark fw-bold px-4">
+                        Entrar
+                    </a>
+                <?php endif; ?>
+            </div>
         </div>
+
+        <!-- Linha 2: link para a listagem de festas -->
+        <div class="mt-2 pt-2" style="border-top:1px solid rgba(0,0,0,.2);">
+            <a href="<?= base_url('festas') ?>"
+               class="fw-semibold text-decoration-none"
+               style="color:#111; font-size:.95rem;">
+                <i class="bi bi-map-fill me-1"></i>
+                Veja as festas que estão rolando &rarr;
+            </a>
+        </div>
+
     </div>
 
     <!-- POSTER VERTICAL + CHAMADA ─────────────────────────── -->

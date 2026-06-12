@@ -8,7 +8,8 @@ use CodeIgniter\Router\RouteCollection;
 
 // === Rotas públicas ===
 $routes->get('/', 'Home::index');
-$routes->get('festa/(:any)', 'Festa::ver/$1');  // aceita slug ou id numérico
+$routes->get('festas', 'Festas::index');           // listagem pública de festas
+$routes->get('festa/(:any)', 'Festa::ver/$1');     // aceita slug ou id numérico
 $routes->get('loja', 'Loja::index');   // Loja geral pública (sem festaId)
 
 // === Shield — login, registro, logout, etc. ===

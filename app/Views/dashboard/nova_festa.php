@@ -191,16 +191,19 @@
                                        required>
                             </div>
 
-                            <!-- Condições de Acesso -->
+                            <!-- Tamanho da Festa -->
                             <div class="col-12">
-                                <label class="form-label fw-semibold">Condições de Acesso</label>
-                                <input type="text"
-                                       name="condicoes_acesso"
-                                       id="condicoes_acesso"
-                                       class="form-control"
-                                       placeholder="Ex: Gratuito, 1kg de alimento, Entrada Franca"
-                                       value="<?= old('condicoes_acesso') ?>"
-                                       required>
+                                <label class="form-label fw-semibold">Tamanho da Festa</label>
+                                <select name="tamanho_festa" id="tamanho_festa" class="form-select" required>
+                                    <option value="" disabled <?= old('tamanho_festa') ? '' : 'selected' ?>>Selecione o público estimado...</option>
+                                    <option value="Até 50 pessoas"              <?= old('tamanho_festa') === 'Até 50 pessoas'              ? 'selected' : '' ?>>Até 50 pessoas</option>
+                                    <option value="De 51 a 150 pessoas"         <?= old('tamanho_festa') === 'De 51 a 150 pessoas'         ? 'selected' : '' ?>>De 51 a 150 pessoas</option>
+                                    <option value="De 151 a 350 pessoas"        <?= old('tamanho_festa') === 'De 151 a 350 pessoas'        ? 'selected' : '' ?>>De 151 a 350 pessoas</option>
+                                    <option value="De 351 a 800 pessoas"        <?= old('tamanho_festa') === 'De 351 a 800 pessoas'        ? 'selected' : '' ?>>De 351 a 800 pessoas</option>
+                                    <option value="De 801 a 1500 pessoas"       <?= old('tamanho_festa') === 'De 801 a 1500 pessoas'       ? 'selected' : '' ?>>De 801 a 1500 pessoas</option>
+                                    <option value="De 1501 a 3000 pessoas"      <?= old('tamanho_festa') === 'De 1501 a 3000 pessoas'      ? 'selected' : '' ?>>De 1501 a 3000 pessoas</option>
+                                    <option value="Sim! Eu vou competir com o carnaval" <?= old('tamanho_festa') === 'Sim! Eu vou competir com o carnaval' ? 'selected' : '' ?>>🎉 Sim! Eu vou competir com o carnaval</option>
+                                </select>
                             </div>
 
                             <!-- Informações Adicionais -->

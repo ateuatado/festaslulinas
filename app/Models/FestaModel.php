@@ -25,7 +25,8 @@ class FestaModel extends Model
         'numero',
         'complemento',
         'local_evento', 
-        'condicoes_acesso', 
+        'tamanho_festa',
+        'condicoes_acesso',
         'descricao',
         'publico_estimado', 
         'publico_real'

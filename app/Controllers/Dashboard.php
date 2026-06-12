@@ -47,7 +47,7 @@ class Dashboard extends BaseController
             'organizacao'      => 'required',
             'cep'              => 'required|min_length[8]',
             'local_evento'     => 'required',
-            'condicoes_acesso' => 'required',
+            'tamanho_festa'    => 'required',
         ];
 
         if (! $this->validate($regras)) {
@@ -80,7 +80,7 @@ class Dashboard extends BaseController
             'numero'           => $this->request->getPost('numero'),
             'complemento'      => $this->request->getPost('complemento'),
             'local_evento'     => $this->request->getPost('local_evento'),
-            'condicoes_acesso' => $this->request->getPost('condicoes_acesso'),
+            'tamanho_festa'    => $this->request->getPost('tamanho_festa'),
             'descricao'        => $this->request->getPost('descricao'),
         ];
 

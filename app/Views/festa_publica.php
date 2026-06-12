@@ -308,7 +308,7 @@
 
     <!-- Voltar -->
     <div class="text-center mt-4">
-        <a href="<?= base_url() ?>" class="btn btn-outline-danger btn-sm">
+        <a href="<?= base_url('festas') ?>" class="btn btn-outline-danger btn-sm">
             &larr; Ver outras Festas Lulinas
         </a>
     </div>

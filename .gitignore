@@ -6,7 +6,7 @@
 /vendor/
 
 # Framework CI4 — gerenciado pelo composer, não versionar
-/system/
+# /system/  # Incluido no repositorio para deploy no VPS
 
 # Configuração de ambiente — NUNCA versione o .env real
 .env

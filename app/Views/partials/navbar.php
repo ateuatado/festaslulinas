@@ -15,33 +15,11 @@
 
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item">
-                    <a class="nav-link text-white fw-semibold" href="<?= base_url() ?>">Inicio</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link text-white fw-semibold <?= url_is('loja*') ? 'active' : '' ?>"
-                       href="<?= base_url('loja') ?>">
-                        <i class="bi bi-shop me-1"></i> Banca Lulina
-                    </a>
+                    <a class="nav-link text-white fw-semibold" href="<?= base_url() ?>">Início</a>
                 </li>
             </ul>
 
             <ul class="navbar-nav ms-auto mb-2 mb-lg-0 align-items-lg-center gap-2">
-
-                <!-- Carrinho -->
-                <?php $cartCount = count(session()->get('carrinho') ?? []); ?>
-                <li class="nav-item">
-                    <a href="<?= base_url('carrinho') ?>"
-                       class="btn btn-outline-warning btn-sm position-relative text-white"
-                       title="Meu Carrinho">
-                        <i class="bi bi-cart3"></i>
-                        <?php if ($cartCount > 0): ?>
-                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
-                                  style="font-size:.6rem;">
-                                <?= $cartCount ?>
-                            </span>
-                        <?php endif; ?>
-                    </a>
-                </li>
 
                 <?php if (auth()->loggedIn()): ?>
 
@@ -68,11 +46,6 @@
                 <?php else: ?>
                     <li class="nav-item">
                         <a href="<?= base_url('login') ?>" class="nav-link text-white fw-bold">Entrar</a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="<?= base_url('register') ?>" class="btn btn-danger btn-sm text-white fw-bold">
-                            Criar Conta
-                        </a>
                     </li>
                 <?php endif; ?>
 

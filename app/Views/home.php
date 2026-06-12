@@ -91,28 +91,20 @@
                     De 13 de julho a 13 de agosto de 2026
                 </div>
                 <p style="color:#cccccc; font-size:1rem; line-height:1.6;">
-                    As Festas Lulinas sao um movimento cultural popular que transforma o legado
-                    do presidente Lula em alegria, arte e resistencia — como o Bumba Meu Boi
-                    e o Sao Joao, mas do nosso tempo e da nossa luta.
+                    As Festas Lulinas, movimento cultural popular que referenda o legado do presidente Lula com alegria, arte e resistência — do Boi Mamão aos bois de Parintins passando por São João, balançando no samba, coco, tecnobrega enfim todas as manifestações culturais que ele sempre apoiou e deu amplitude em seus governos, nosso tempo e cultura vista com soberania e apoiando nossas luta.
                 </p>
                 <p style="color:#cccccc; font-size:1rem; line-height:1.6;">
-                    Cadastre sua festa, envie fotos e videos, e receba materiais de apoio
-                    para celebrar o Brasil Lulino em todo o territorio nacional.
+                    Cadastre sua festa, envie fotos e vídeos, e receba materiais de apoio
+                    para celebrar o Brasil Lulino em todo o território nacional.
                 </p>
                 <div class="d-flex flex-wrap gap-3 mt-4 justify-content-center justify-content-md-start">
                     <?php if (auth()->loggedIn()): ?>
                         <a href="<?= base_url('dashboard') ?>" class="btn btn-warning btn-lg fw-bold text-dark">
                             <i class="bi bi-grid-fill me-1"></i> Minhas Festas
                         </a>
-                        <a href="<?= base_url('loja') ?>" class="btn btn-outline-warning btn-lg fw-bold">
-                            <i class="bi bi-shop me-1"></i> Banca Lulina
-                        </a>
                     <?php else: ?>
                         <a href="<?= base_url('register') ?>" class="btn btn-danger btn-lg fw-bold px-4">
                             <i class="bi bi-star-fill me-1"></i> Cadastrar Minha Festa
-                        </a>
-                        <a href="<?= base_url('loja') ?>" class="btn btn-outline-warning btn-lg fw-bold">
-                            <i class="bi bi-shop me-1"></i> Ver a Banca
                         </a>
                     <?php endif; ?>
                 </div>

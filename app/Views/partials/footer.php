@@ -29,25 +29,7 @@
                     <li class="mb-2"><a href="#" class="hover-link" style="color:#cccccc; text-decoration:none;">Termos de Uso</a></li>
                 </ul>
             </div>
-
-            <div class="col-lg-4 col-md-12">
-                <h6 class="text-uppercase fw-bold mb-3" style="color:#888888;">Realização</h6>
-                <div class="d-flex align-items-center gap-3 mb-3">
-                    <div class="bg-danger text-white rounded d-flex align-items-center justify-content-center fw-bold"
-                         style="width:50px; height:50px; min-width:50px;">
-                        PT
-                    </div>
-                    <div>
-                        <p class="mb-0 fw-bold small" style="color:#ffffff;">Comitê Popular de Luta</p>
-                        <p class="mb-0 small" style="color:#888888;">Brasil da Esperança</p>
-                    </div>
-                </div>
-                <p class="small" style="color:#888888;">
-                    Dúvidas? <br>
-                    <a href="mailto:contato@festaslulinas.com.br" style="color:#C9971C; text-decoration:none;">contato@festaslulinas.com.br</a>
-                </p>
-            </div>
-        </div>
+        </div><!-- /row g-4 -->
 
         <hr style="border-color:#333333; margin:1.5rem 0;">
 

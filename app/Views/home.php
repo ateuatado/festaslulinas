@@ -39,38 +39,31 @@
 </div>
 
 <!-- ============================================================
-     FAIXA CTA — mantém full-width (é uma faixa de destaque)
-     ============================================================ -->
-<div class="faixa-cta" style="background-color:#C9971C; border-bottom:3px solid #111; padding:1rem 0;">
-    <div class="container">
-        <div class="row align-items-center justify-content-between g-3">
-            <div class="col-lg-7 text-center text-lg-start">
-                <p class="cta-text mb-0 fw-bold" style="text-transform:uppercase; letter-spacing:0.03em;">
-                    Organize seu comite, chame a comunidade e faca parte dessa historia.
-                </p>
-            </div>
-            <div class="col-lg-5 d-flex gap-3 justify-content-center justify-content-lg-end flex-wrap">
-                <?php if (auth()->loggedIn()): ?>
-                    <a href="<?= base_url('dashboard') ?>" class="btn btn-dark fw-bold text-warning">
-                        <i class="bi bi-grid-fill me-1"></i> Acessar Painel
-                    </a>
-                <?php else: ?>
-                    <a href="<?= base_url('register') ?>" class="btn btn-danger fw-bold px-4">
-                        <i class="bi bi-star-fill me-1"></i> QUERO ORGANIZAR
-                    </a>
-                    <a href="<?= base_url('login') ?>" class="btn btn-outline-dark fw-bold px-4">
-                        Entrar
-                    </a>
-                <?php endif; ?>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- ============================================================
      CORPO DA PÁGINA — tudo dentro de um container
      ============================================================ -->
 <div class="container py-5">
+
+    <!-- FAIXA CTA ──────────────────────────────────────────── -->
+    <div class="rounded-4 mb-4 px-4 py-3 d-flex flex-wrap align-items-center justify-content-between gap-3"
+         style="background-color:#C9971C; border:3px solid #111;">
+        <p class="cta-text mb-0 fw-bold" style="text-transform:uppercase; letter-spacing:0.03em; color:#111;">
+            Organize seu comite, chame a comunidade e faca parte dessa historia.
+        </p>
+        <div class="d-flex gap-3 flex-wrap">
+            <?php if (auth()->loggedIn()): ?>
+                <a href="<?= base_url('dashboard') ?>" class="btn btn-dark fw-bold text-warning">
+                    <i class="bi bi-grid-fill me-1"></i> Acessar Painel
+                </a>
+            <?php else: ?>
+                <a href="<?= base_url('register') ?>" class="btn btn-danger fw-bold px-4">
+                    <i class="bi bi-star-fill me-1"></i> QUERO ORGANIZAR
+                </a>
+                <a href="<?= base_url('login') ?>" class="btn btn-outline-dark fw-bold px-4">
+                    Entrar
+                </a>
+            <?php endif; ?>
+        </div>
+    </div>
 
     <!-- POSTER VERTICAL + CHAMADA ─────────────────────────── -->
     <div class="rounded-4 overflow-hidden mb-5"

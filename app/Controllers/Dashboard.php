@@ -112,34 +112,62 @@ class Dashboard extends BaseController
     public function atualizar($id)
     {
         $festaModel = new FestaModel();
-        
-        // Verifica propriedade
-        $festa = $festaModel->where('id', $id)->where('user_id', auth()->id())->first();
-        if (!$festa) return redirect()->to('dashboard');
+        $isAdmin    = auth()->user()->inGroup('admin');
+
+        // Verifica propriedade (admin pode editar qualquer festa)
+        $query = $festaModel->where('id', $id);
+        if (! $isAdmin) {
+            $query = $query->where('user_id', auth()->id());
+        }
+        $festa = $query->first();
+        if (! $festa) return redirect()->to('dashboard')->with('error', 'Festa não encontrada.');
+
+        // Monta data_hora a partir dos dois campos
+        $dataEvento = $this->request->getPost('data_evento');
+        $horaEvento = $this->request->getPost('hora_evento');
+        $dataHora   = $dataEvento . ' ' . $horaEvento . ':00';
 
         // Regras de validação
         $regras = [
-            'nome_festa' => 'required|min_length[3]',
-            'data_hora'  => 'required',
-            'cidade'     => 'required',
-            // Públicos são opcionais, mas devem ser números
+            'nome_festa'       => 'required|min_length[3]',
+            'data_evento'      => 'required|valid_date[Y-m-d]',
+            'hora_evento'      => 'required',
+            'organizacao'      => 'required',
+            'local_evento'     => 'required',
+            'tamanho_festa'    => 'required',
             'publico_estimado' => 'permit_empty|integer',
             'publico_real'     => 'permit_empty|integer',
         ];
 
-        if (!$this->validate($regras)) {
+        if (! $this->validate($regras)) {
             return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
+        }
+
+        // Valida período para usuários comuns
+        if (! $isAdmin) {
+            $dt     = new \DateTime($dataEvento);
+            $dtMin  = new \DateTime('2026-07-13');
+            $dtMax  = new \DateTime('2026-08-13');
+            if ($dt < $dtMin || $dt > $dtMax) {
+                return redirect()->back()->withInput()
+                    ->with('errors', ['data_evento' => 'A data deve estar entre 13/07/2026 e 13/08/2026.']);
+            }
         }
 
         // Dados para atualizar
         $dados = [
             'nome_festa'       => $this->request->getPost('nome_festa'),
-            'data_hora'        => $this->request->getPost('data_hora'),
+            'data_hora'        => $dataHora,
             'organizacao'      => $this->request->getPost('organizacao'),
+            'cep'              => preg_replace('/\D/', '', $this->request->getPost('cep') ?? ''),
+            'logradouro'       => $this->request->getPost('logradouro'),
+            'bairro'           => $this->request->getPost('bairro'),
             'cidade'           => $this->request->getPost('cidade'),
-            'uf'               => $this->request->getPost('uf'),
+            'uf'               => strtoupper($this->request->getPost('uf') ?? ''),
+            'numero'           => $this->request->getPost('numero'),
+            'complemento'      => $this->request->getPost('complemento'),
             'local_evento'     => $this->request->getPost('local_evento'),
-            'condicoes_acesso' => $this->request->getPost('condicoes_acesso'),
+            'tamanho_festa'    => $this->request->getPost('tamanho_festa'),
             'descricao'        => $this->request->getPost('descricao'),
             'publico_estimado' => $this->request->getPost('publico_estimado'),
             'publico_real'     => $this->request->getPost('publico_real'),

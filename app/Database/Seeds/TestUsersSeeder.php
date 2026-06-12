@@ -12,8 +12,8 @@ use CodeIgniter\Shield\Entities\User;
  *   php spark db:seed App\Database\Seeds\TestUsersSeeder
  *
  * Usuários criados:
- *   [admin] festaslulinas@gmail.com.br  senha: Lula#Tetra26
- *   [user]  eiouaueaio@gmail.com        senha: Lula#Tetra26
+ *   [admin] festaslulinas@gmail.com  senha: Lula#Tetra26
+ *   [user]  eiouaueaio@gmail.com     senha: Lula#Tetra26
  */
 class TestUsersSeeder extends Seeder
 {
@@ -25,7 +25,7 @@ class TestUsersSeeder extends Seeder
         $contas = [
             [
                 'username' => 'festaslulinas',
-                'email'    => 'festaslulinas@gmail.com.br',
+                'email'    => 'festaslulinas@gmail.com',
                 'password' => 'Lula#Tetra26',
                 'grupo'    => 'admin',
             ],

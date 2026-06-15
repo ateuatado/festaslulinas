@@ -17,6 +17,13 @@
                 <li class="nav-item">
                     <a class="nav-link text-white fw-semibold" href="<?= base_url() ?>">Início</a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link fw-bold d-flex align-items-center gap-1"
+                       href="https://festaslulinas.com.br/festas"
+                       style="color:#C9971C;">
+                        <i class="bi bi-balloon-heart-fill"></i> Festas 2026
+                    </a>
+                </li>
             </ul>
 
             <ul class="navbar-nav ms-auto mb-2 mb-lg-0 align-items-lg-center gap-2">

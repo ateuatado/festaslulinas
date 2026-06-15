@@ -3,10 +3,21 @@
 
 <?= $this->section('content') ?>
 
+<!-- Frase de abertura -->
+<div class="text-center py-2"
+     style="background:#111; border-bottom:3px solid #C9971C;">
+    <p class="mb-0 fw-bold fst-italic"
+       style="font-family:'Bebas Neue',Impact,sans-serif; font-size:1.4rem;
+              color:#C9971C; letter-spacing:0.06em;">
+        Toda Festa é um ato político.
+    </p>
+</div>
+
 <!-- ============================================================
      CARROSSEL — mantém full-width (é o hero)
      ============================================================ -->
 <div class="hero-carousel" style="background-color:#ffffff; border-bottom:4px solid #C9971C;">
+
     <div id="carrosselLulinas" class="carousel slide" data-bs-ride="carousel" data-bs-interval="5000">
 
         <div class="carousel-indicators">

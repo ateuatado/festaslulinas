@@ -72,6 +72,93 @@
 
     </div>
 
+    <!-- NOSSA HISTÓRIA ─────────────────────────────────────── -->
+    <section class="mb-5">
+        <div class="text-center mb-4">
+            <h2 style="font-family:'Bebas Neue',Impact,sans-serif; font-size:2.4rem;
+                       color:#111; letter-spacing:0.05em;">
+                Nossa História
+            </h2>
+            <p class="text-muted mb-0" style="font-size:.95rem;">
+                De 13 de julho a 13 de agosto, todo ano o Brasil festeja Lula.
+            </p>
+        </div>
+
+        <!-- Linha do tempo com scroll horizontal no mobile -->
+        <div class="d-flex gap-4 overflow-auto pb-2"
+             style="scroll-snap-type:x mandatory; -webkit-overflow-scrolling:touch;">
+
+            <!-- 2022 -->
+            <div class="flex-shrink-0 text-center" style="width:200px; scroll-snap-align:start;">
+                <div class="rounded-4 h-100 p-3 d-flex flex-column align-items-center"
+                     style="background:#111; border:3px solid #C9971C;">
+                    <span style="font-family:'Bebas Neue',Impact,sans-serif;font-size:2.8rem;color:#C9971C;line-height:1;">2022</span>
+                    <span class="badge mb-2" style="background:#b71c1c;font-size:.7rem;">1ª edição</span>
+                    <p class="fw-bold text-white mb-1" style="font-size:.9rem;line-height:1.3;">O Brasil Festejando de Novo</p>
+                    <p class="mb-0" style="font-size:.8rem;color:#C9971C;font-style:italic;">A retomada da esperança!</p>
+                </div>
+            </div>
+
+            <!-- 2023 -->
+            <div class="flex-shrink-0 text-center" style="width:200px; scroll-snap-align:start;">
+                <div class="rounded-4 h-100 p-3 d-flex flex-column align-items-center"
+                     style="background:#111; border:3px solid #C9971C;">
+                    <span style="font-family:'Bebas Neue',Impact,sans-serif;font-size:2.8rem;color:#C9971C;line-height:1;">2023</span>
+                    <span class="badge mb-2" style="background:#b71c1c;font-size:.7rem;">2ª edição</span>
+                    <p class="fw-bold text-white mb-1" style="font-size:.9rem;line-height:1.3;">Origens</p>
+                    <p class="mb-0" style="font-size:.8rem;color:#C9971C;font-style:italic;">Valorização da Nossa História</p>
+                </div>
+            </div>
+
+            <!-- 2024 -->
+            <div class="flex-shrink-0 text-center" style="width:200px; scroll-snap-align:start;">
+                <div class="rounded-4 h-100 p-3 d-flex flex-column align-items-center"
+                     style="background:#111; border:3px solid #C9971C;">
+                    <span style="font-family:'Bebas Neue',Impact,sans-serif;font-size:2.8rem;color:#C9971C;line-height:1;">2024</span>
+                    <span class="badge mb-2" style="background:#b71c1c;font-size:.7rem;">3ª edição</span>
+                    <p class="fw-bold text-white mb-1" style="font-size:.9rem;line-height:1.3;">Orgulho de Ser Brasileiro</p>
+                    <p class="mb-0" style="font-size:.8rem;color:#C9971C;font-style:italic;">União e reconstrução em todo lugar!</p>
+                </div>
+            </div>
+
+            <!-- 2025 -->
+            <div class="flex-shrink-0 text-center" style="width:200px; scroll-snap-align:start;">
+                <div class="rounded-4 h-100 p-3 d-flex flex-column align-items-center"
+                     style="background:#111; border:3px solid #C9971C;">
+                    <span style="font-family:'Bebas Neue',Impact,sans-serif;font-size:2.8rem;color:#C9971C;line-height:1;">2025</span>
+                    <span class="badge mb-2" style="background:#b71c1c;font-size:.7rem;">4ª edição</span>
+                    <p class="fw-bold text-white mb-1" style="font-size:.9rem;line-height:1.3;">Guerreiro Contra a Fome e a Miséria</p>
+                    <p class="mb-0" style="font-size:.8rem;color:#C9971C;font-style:italic;">Solidariedade e luta!</p>
+                </div>
+            </div>
+
+            <!-- 2026 — edição atual, destaque -->
+            <div class="flex-shrink-0 text-center" style="width:200px; scroll-snap-align:start;">
+                <div class="rounded-4 h-100 p-3 d-flex flex-column align-items-center"
+                     style="background:#b71c1c; border:3px solid #C9971C;">
+                    <span style="font-family:'Bebas Neue',Impact,sans-serif;font-size:2.8rem;color:#fff;line-height:1;">2026</span>
+                    <span class="badge mb-2" style="background:#C9971C;color:#111;font-size:.7rem;">&#9733; 5ª edição — AGORA!</span>
+                    <p class="fw-bold text-white mb-1" style="font-size:.9rem;line-height:1.3;">O Mundo Celebra Lula</p>
+                    <p class="mb-0" style="font-size:.8rem;color:#ffe082;font-style:italic;">Brasil Soberano e Festejando!</p>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Parágrafo de origem -->
+        <div class="mt-4 px-1">
+            <p class="text-muted" style="font-size:.9rem;line-height:1.7;max-width:780px;">
+                O <strong>Comitê Popular de Luta Festas Lulinas</strong> nasceu para registrar e fortalecer
+                o legado e as realizações do Presidente Lula — um festival de festas populares no Brasil e no mundo.
+                Já contou com festas em Barueri, Osasco, São Paulo, Bahia, Rio de Janeiro, Mato Grosso do Sul,
+                Pernambuco e até no exterior: <em>Alemanha, França e Espanha</em>.
+                A proposta é fazer uma festa brasileira que respeite as características de cada região,
+                cidade, comunidade e bairro — dentro e fora do Brasil.
+            </p>
+        </div>
+    </section>
+
+    <!-- POSTER VERTICAL + CHAMADA ─────────────────────────── -->
     <!-- POSTER VERTICAL + CHAMADA ─────────────────────────── -->
     <div class="rounded-4 overflow-hidden mb-5"
          style="background-color:#111111; border:3px solid #C9971C;">

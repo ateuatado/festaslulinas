@@ -178,7 +178,7 @@
             <!-- Poster -->
             <div class="col-12 col-md-4 text-center p-4 p-md-5"
                  style="border-right:3px solid #C9971C;">
-                <img src="<?= base_url('assets/img/poster_vertical.png') ?>"
+                <img src="<?= base_url('assets/img/poster_vertical.jpg') ?>"
                      class="img-fluid"
                      style="max-width:260px; width:100%; border:4px solid #C9971C; border-radius:8px;"
                      alt="Festas Lulinas - O Festival de Festas Esta Chegando">
